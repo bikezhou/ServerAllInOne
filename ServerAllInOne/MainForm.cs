@@ -1,12 +1,15 @@
 using ServerAllInOne.Configs;
 using ServerAllInOne.Controls;
 using ServerAllInOne.Forms;
+using System.Reflection;
 
 namespace ServerAllInOne
 {
     public partial class MainForm : Form
     {
         ServerConfigs configs;
+
+        public bool ConfirmExit { get; set; }
         public MainForm()
         {
             InitializeComponent();
@@ -20,6 +23,21 @@ namespace ServerAllInOne
             foreach (var server in configs.Servers)
             {
                 AddServerTab(server);
+            }
+
+            UpdateNotifyIcon();
+        }
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (ConfirmExit)
+            {
+                btnStopServer_Click(btnStopServer, EventArgs.Empty);
+            }
+            else
+            {
+                Hide();
+                e.Cancel = true;
             }
         }
 
@@ -56,6 +74,8 @@ namespace ServerAllInOne
             }
 
             tabControl.ResumeLayout(true);
+
+            UpdateNotifyIcon();
         }
 
         private void btnStartServer_Click(object sender, EventArgs e)
@@ -74,6 +94,8 @@ namespace ServerAllInOne
                     }
                 }
             }
+
+            UpdateNotifyIcon();
         }
 
         private void btnAddServer_Click(object sender, EventArgs e)
@@ -91,12 +113,9 @@ namespace ServerAllInOne
 
                     SortServerTab();
                 }
-            }
-        }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            btnStopServer_Click(btnStopServer, EventArgs.Empty);
+                UpdateNotifyIcon();
+            }
         }
 
         private void btnStopServer_Click(object sender, EventArgs e)
@@ -105,6 +124,29 @@ namespace ServerAllInOne
             {
                 (tabPage.Controls[0] as ServerConsole)?.Stop();
             });
+
+            UpdateNotifyIcon();
+        }
+
+        private void UpdateNotifyIcon()
+        {
+            var running = 0;
+            var total = 0;
+            ServerTabForeach(tabPage =>
+            {
+                total++;
+                if (tabPage.Controls[0] is ServerConsole sc && sc.Running)
+                {
+                    running++;
+                }
+            });
+
+            var iconPath = running == 0 ? @"ServerAllInOne.Assets.Icons.server_windows_stop.ico"
+                                        : @"ServerAllInOne.Assets.Icons.server_windows.ico";
+
+            notifyIcon.Icon = new Icon(Assembly.GetExecutingAssembly().GetManifestResourceStream(iconPath));
+
+            notifyIcon.Text = $"正在运行：{running}/{total}";
         }
 
         private void ServerTabForeach(Action<TabPage> action)
@@ -165,6 +207,17 @@ namespace ServerAllInOne
         {
             var console = tabControl.SelectedTab.Controls[0] as ServerConsole;
             console?.Stop();
+        }
+
+        private void tsmiOpenMainForm_Click(object sender, EventArgs e)
+        {
+            Show();
+        }
+
+        private void tsmiExit_Click(object sender, EventArgs e)
+        {
+            ConfirmExit = true;
+            Close();
         }
     }
 }

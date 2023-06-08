@@ -6,7 +6,22 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Assets\Icons\server_windows.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\Icons\server_windows.ico" />
+    <None Remove="Assets\Icons\server_windows_stop.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Icons\server_windows.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\Icons\server_windows.ico" />
+    <EmbeddedResource Include="Assets\Icons\server_windows_stop.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />

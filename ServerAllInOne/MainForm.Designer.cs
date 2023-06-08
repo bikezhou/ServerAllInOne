@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tabHome = new TabPage();
             tableLayoutPanel1 = new TableLayoutPanel();
             btnStopServer = new Button();
@@ -38,10 +39,15 @@
             cmsTabMenu = new ContextMenuStrip(components);
             tsmiStartServer = new ToolStripMenuItem();
             tsmiStopServer = new ToolStripMenuItem();
+            notifyIcon = new NotifyIcon(components);
+            cmsMain = new ContextMenuStrip(components);
+            tsmiOpenMainForm = new ToolStripMenuItem();
+            tsmiExit = new ToolStripMenuItem();
             tabHome.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             tabControl.SuspendLayout();
             cmsTabMenu.SuspendLayout();
+            cmsMain.SuspendLayout();
             SuspendLayout();
             // 
             // tabHome
@@ -144,12 +150,40 @@
             tsmiStopServer.Text = "停止服务";
             tsmiStopServer.Click += tsmiStopServer_Click;
             // 
+            // notifyIcon
+            // 
+            notifyIcon.ContextMenuStrip = cmsMain;
+            notifyIcon.Icon = (Icon)resources.GetObject("notifyIcon.Icon");
+            notifyIcon.Text = "4543634646";
+            notifyIcon.Visible = true;
+            // 
+            // cmsMain
+            // 
+            cmsMain.Items.AddRange(new ToolStripItem[] { tsmiOpenMainForm, tsmiExit });
+            cmsMain.Name = "cmsMain";
+            cmsMain.Size = new Size(137, 48);
+            // 
+            // tsmiOpenMainForm
+            // 
+            tsmiOpenMainForm.Name = "tsmiOpenMainForm";
+            tsmiOpenMainForm.Size = new Size(136, 22);
+            tsmiOpenMainForm.Text = "打开主界面";
+            tsmiOpenMainForm.Click += tsmiOpenMainForm_Click;
+            // 
+            // tsmiExit
+            // 
+            tsmiExit.Name = "tsmiExit";
+            tsmiExit.Size = new Size(136, 22);
+            tsmiExit.Text = "退出";
+            tsmiExit.Click += tsmiExit_Click;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
             Controls.Add(tabControl);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
             Padding = new Padding(5);
             StartPosition = FormStartPosition.CenterScreen;
@@ -159,6 +193,7 @@
             tableLayoutPanel1.ResumeLayout(false);
             tabControl.ResumeLayout(false);
             cmsTabMenu.ResumeLayout(false);
+            cmsMain.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -173,5 +208,9 @@
         private ContextMenuStrip cmsTabMenu;
         private ToolStripMenuItem tsmiStartServer;
         private ToolStripMenuItem tsmiStopServer;
+        private NotifyIcon notifyIcon;
+        private ContextMenuStrip cmsMain;
+        private ToolStripMenuItem tsmiOpenMainForm;
+        private ToolStripMenuItem tsmiExit;
     }
 }
