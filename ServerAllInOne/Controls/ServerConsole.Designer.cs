@@ -55,7 +55,6 @@
             txtInput.Name = "txtInput";
             txtInput.Size = new Size(642, 17);
             txtInput.TabIndex = 0;
-            txtInput.Visible = false;
             txtInput.KeyDown += txtInput_KeyDown;
             // 
             // ServerConsole

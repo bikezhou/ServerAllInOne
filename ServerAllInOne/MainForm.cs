@@ -2,12 +2,15 @@ using ServerAllInOne.Configs;
 using ServerAllInOne.Controls;
 using ServerAllInOne.Forms;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace ServerAllInOne
 {
     public partial class MainForm : Form
     {
         ServerConfigs configs;
+
+        private int runningServerCount = 0;
 
         public bool ConfirmExit { get; set; }
         public MainForm()
@@ -32,7 +35,7 @@ namespace ServerAllInOne
         {
             if (ConfirmExit)
             {
-                btnStopServer_Click(btnStopServer, EventArgs.Empty);
+                StopAllServer();
             }
             else
             {
@@ -44,13 +47,34 @@ namespace ServerAllInOne
         private void AddServerTab(Server server)
         {
             var tabPage = new TabPage(server.Name);
-            tabPage.Controls.Add(new ServerConsole()
+            var serverConsole = new ServerConsole()
             {
                 Dock = DockStyle.Fill,
                 ServerConfig = server
-            });
+            };
+            serverConsole.ServerStateChanged += ServerConsole_ServerStateChanged;
+            tabPage.Controls.Add(serverConsole);
             tabPage.Tag = server;
             tabControl.TabPages.Add(tabPage);
+        }
+
+        private void ServerConsole_ServerStateChanged(object? sender, EventArgs e)
+        {
+            // 服务状态改变
+
+            if (sender is ServerConsole server)
+            {
+                if (server.Running)
+                {
+                    runningServerCount++;
+                }
+                else
+                {
+                    runningServerCount--;
+                }
+            }
+
+            UpdateNotifyIcon();
         }
 
         private void SortServerTab()
@@ -74,28 +98,6 @@ namespace ServerAllInOne
             }
 
             tabControl.ResumeLayout(true);
-
-            UpdateNotifyIcon();
-        }
-
-        private void btnStartServer_Click(object sender, EventArgs e)
-        {
-            foreach (TabPage tabPage in this.tabControl.TabPages)
-            {
-                if (tabPage == tabHome)
-                    continue;
-
-                var console = tabPage.Controls[0] as ServerConsole;
-                if (console != null)
-                {
-                    if (!console.Running)
-                    {
-                        console.Start();
-                    }
-                }
-            }
-
-            UpdateNotifyIcon();
         }
 
         private void btnAddServer_Click(object sender, EventArgs e)
@@ -113,19 +115,62 @@ namespace ServerAllInOne
 
                     SortServerTab();
                 }
-
-                UpdateNotifyIcon();
             }
+        }
+
+        private void btnStartServer_Click(object sender, EventArgs e)
+        {
+            if (MessageBox.Show("是否一键启动所有服务？", "启动服务", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            {
+                return;
+            }
+
+            StartAllServer();
         }
 
         private void btnStopServer_Click(object sender, EventArgs e)
         {
+            if (runningServerCount == 0)
+                return;
+
+            if (MessageBox.Show("是否一键停止已启动服务？", "停止服务", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            {
+                return;
+            }
+
+            StopAllServer();
+        }
+
+        private void StartAllServer()
+        {
             ServerTabForeach(tabPage =>
             {
-                (tabPage.Controls[0] as ServerConsole)?.Stop();
-            });
+                if (tabPage.Controls[0] is ServerConsole server)
+                {
+                    server.Start();
 
-            UpdateNotifyIcon();
+                    if (tabPage.Tag is Server c && server.ProcessId.HasValue)
+                    {
+                        tabPage.Text = $"{c.Name}[{server.ProcessId.Value}]";
+                    }
+                }
+            });
+        }
+
+        private void StopAllServer()
+        {
+            ServerTabForeach(tabPage =>
+            {
+                if (tabPage.Controls[0] is ServerConsole server)
+                {
+                    server.Stop();
+                }
+
+                if (tabPage.Tag is Server c)
+                {
+                    tabPage.Text = c.Name;
+                }
+            });
         }
 
         private void UpdateNotifyIcon()
@@ -199,14 +244,29 @@ namespace ServerAllInOne
 
         private void tsmiStartServer_Click(object sender, EventArgs e)
         {
-            var console = tabControl.SelectedTab.Controls[0] as ServerConsole;
-            console?.Start();
+            var tabPage = tabControl.SelectedTab;
+            if (tabPage.Controls[0] is ServerConsole server)
+            {
+                server.Start();
+
+                if (tabPage.Tag is Server c && server.ProcessId.HasValue)
+                {
+                    tabPage.Text = $"{c.Name}[{server.ProcessId.Value}]";
+                }
+            }
         }
 
         private void tsmiStopServer_Click(object sender, EventArgs e)
         {
-            var console = tabControl.SelectedTab.Controls[0] as ServerConsole;
-            console?.Stop();
+            var tabPage = tabControl.SelectedTab;
+            if (tabPage.Controls[0] is ServerConsole server)
+            {
+                server.Stop();
+            }
+            if (tabPage.Tag is Server c)
+            {
+                tabPage.Text = c.Name;
+            }
         }
 
         private void tsmiOpenMainForm_Click(object sender, EventArgs e)
@@ -218,6 +278,11 @@ namespace ServerAllInOne
         {
             ConfirmExit = true;
             Close();
+        }
+
+        private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            tsmiOpenMainForm_Click(tsmiOpenMainForm, EventArgs.Empty);
         }
     }
 }

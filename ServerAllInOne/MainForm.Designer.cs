@@ -56,7 +56,7 @@
             tabHome.Location = new Point(4, 26);
             tabHome.Name = "tabHome";
             tabHome.Padding = new Padding(3);
-            tabHome.Size = new Size(782, 410);
+            tabHome.Size = new Size(966, 501);
             tabHome.TabIndex = 0;
             tabHome.Text = "主页";
             tabHome.UseVisualStyleBackColor = true;
@@ -70,8 +70,8 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.Controls.Add(btnStopServer, 3, 1);
-            tableLayoutPanel1.Controls.Add(btnAddServer, 2, 1);
-            tableLayoutPanel1.Controls.Add(btnStartServer, 1, 1);
+            tableLayoutPanel1.Controls.Add(btnAddServer, 1, 1);
+            tableLayoutPanel1.Controls.Add(btnStartServer, 2, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(3, 3);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -79,7 +79,7 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel1.Size = new Size(776, 404);
+            tableLayoutPanel1.Size = new Size(960, 495);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // btnStopServer
@@ -87,7 +87,7 @@
             btnStopServer.Dock = DockStyle.Fill;
             btnStopServer.Font = new Font("Microsoft YaHei UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
             btnStopServer.ForeColor = Color.Red;
-            btnStopServer.Location = new Point(451, 175);
+            btnStopServer.Location = new Point(543, 220);
             btnStopServer.Name = "btnStopServer";
             btnStopServer.Size = new Size(114, 54);
             btnStopServer.TabIndex = 2;
@@ -98,7 +98,7 @@
             // btnAddServer
             // 
             btnAddServer.Dock = DockStyle.Fill;
-            btnAddServer.Location = new Point(331, 175);
+            btnAddServer.Location = new Point(303, 220);
             btnAddServer.Name = "btnAddServer";
             btnAddServer.Size = new Size(114, 54);
             btnAddServer.TabIndex = 1;
@@ -109,7 +109,7 @@
             // btnStartServer
             // 
             btnStartServer.Dock = DockStyle.Fill;
-            btnStartServer.Location = new Point(211, 175);
+            btnStartServer.Location = new Point(423, 220);
             btnStartServer.Name = "btnStartServer";
             btnStartServer.Size = new Size(114, 54);
             btnStartServer.TabIndex = 0;
@@ -124,7 +124,7 @@
             tabControl.Location = new Point(5, 5);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(790, 440);
+            tabControl.Size = new Size(974, 531);
             tabControl.TabIndex = 0;
             tabControl.MouseDown += tabControl_MouseDown;
             tabControl.MouseLeave += tabControl_MouseLeave;
@@ -156,6 +156,7 @@
             notifyIcon.Icon = (Icon)resources.GetObject("notifyIcon.Icon");
             notifyIcon.Text = "4543634646";
             notifyIcon.Visible = true;
+            notifyIcon.MouseDoubleClick += notifyIcon_MouseDoubleClick;
             // 
             // cmsMain
             // 
@@ -181,7 +182,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(800, 450);
+            ClientSize = new Size(984, 541);
             Controls.Add(tabControl);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";

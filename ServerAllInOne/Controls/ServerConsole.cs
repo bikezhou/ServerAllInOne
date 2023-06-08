@@ -34,6 +34,13 @@ namespace ServerAllInOne.Controls
 
         Process? process;
 
+        public int? ProcessId
+        {
+            get => process?.Id;
+        }
+
+        public event EventHandler<EventArgs> ServerStateChanged;
+
         public ServerConsole()
         {
             InitializeComponent();
@@ -43,11 +50,11 @@ namespace ServerAllInOne.Controls
 
         private void ServerConsole_Load(object? sender, EventArgs e)
         {
-            WriteText("服务未启动");
-            if (ServerConfig != null)
-            {
-                txtInput.Visible = ServerConfig.CanInput;
-            }
+            WriteTextLine("服务未启动");
+            //if (ServerConfig != null)
+            //{
+            //    txtInput.Visible = ServerConfig.CanInput;
+            //}
         }
 
         private void ServerConsole_Disposed(object? sender, EventArgs e)
@@ -55,7 +62,7 @@ namespace ServerAllInOne.Controls
             Stop();
         }
 
-        public bool Running { get; set; }
+        public bool Running { get; private set; }
 
         public Server ServerConfig { get; set; }
 
@@ -70,7 +77,7 @@ namespace ServerAllInOne.Controls
             {
                 if (!File.Exists(ServerConfig.ExePath))
                 {
-                    WriteText($"可执行程序文件不存在：{ServerConfig.ExePath}");
+                    WriteTextLine($"服务文件不存在：{ServerConfig.ExePath}");
                     return;
                 }
 
@@ -91,14 +98,18 @@ namespace ServerAllInOne.Controls
                     process.ErrorDataReceived += Process_ErrorDataReceived;
                     process.BeginErrorReadLine();
 
-                    txtInput.Visible = ServerConfig.CanInput;
+                    //txtInput.Visible = ServerConfig.CanInput;
 
                     Running = true;
+
+                    WriteTextLine($"服务已启动[进程ID：{process.Id}]");
+
+                    ServerStateChanged?.Invoke(this, EventArgs.Empty);
                 }
             }
             catch (Exception ex)
             {
-                WriteText($"启动应用程序异常：{ex.Message}");
+                WriteTextLine($"启动服务异常：{ex.Message}");
             }
         }
 
@@ -106,19 +117,27 @@ namespace ServerAllInOne.Controls
         {
             if (!string.IsNullOrEmpty(e.Data))
             {
-                WriteText("[Console Error]: " + e.Data + Environment.NewLine);
+                WriteTextLine("[服务错误]: " + e.Data);
             }
         }
 
         private void Process_Exited(object? sender, EventArgs e)
         {
-            WriteText("Server exit.");
+            WriteTextLine("服务已停止");
+
+            process = null;
+            Running = false;
+
+            ServerStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
         public void Stop()
         {
             if (Running && process != null)
             {
+                process.CancelErrorRead();
+                process.CancelOutputRead();
+
                 // 未成功
                 var handler = new ConsoleCtrlDelegate(c =>
                 {
@@ -148,29 +167,26 @@ namespace ServerAllInOne.Controls
                 {
                     return;
                 }
-                WriteText("服务已停止");
-                process = null;
-                Running = false;
+
+                if (!process.HasExited)
+                {
+                    WriteTextLine("服务停止失败");
+                    return;
+                }
             }
         }
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            WriteText(e.Data + Environment.NewLine);
+            if (!string.IsNullOrEmpty(e.Data))
+            {
+                WriteTextLine(e.Data);
+            }
         }
 
-        private void ClearText()
+        private void WriteTextLine(string text)
         {
-            if (InvokeRequired)
-            {
-                Invoke(new MethodInvoker(() =>
-                {
-                    ClearText();
-                }));
-                return;
-            }
-
-            richTextBox.Clear();
+            WriteText(text + Environment.NewLine);
         }
 
         private void WriteText(string? text)
@@ -229,22 +245,44 @@ namespace ServerAllInOne.Controls
             richTextBox.ResumeLayout(true);
         }
 
+        private void ClearText()
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new MethodInvoker(() =>
+                {
+                    ClearText();
+                }));
+                return;
+            }
+
+            richTextBox.Clear();
+        }
+
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Enter && (ServerConfig?.CanInput ?? false))
             {
                 var input = txtInput.Text;
-                WriteText(input);
-                if (input == ":clear")
+                try
                 {
-                    ClearText();
+                    if (input == ":clear")
+                    {
+                        ClearText();
+                        return;
+                    }
+
+                    WriteTextLine(input);
+                    if (process != null)
+                    {
+                        process.StandardInput.WriteLine(input);
+                        process.StandardInput.Flush();
+                    }
                 }
-                if (process != null)
+                finally
                 {
-                    process.StandardInput.WriteLine(input);
-                    process.StandardInput.Flush();
+                    txtInput.Clear();
                 }
-                txtInput.Clear();
             }
         }
     }

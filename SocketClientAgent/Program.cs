@@ -290,7 +290,19 @@ namespace SocketClientAgent
                             var data = dataBuffer.GetRange(4, dataLength).ToArray();
                             dataBuffer.RemoveRange(0, dataLength + 4);
 
-                            await WriteInfoAsync($"receive message: {Encoding.UTF8.GetString(data)}");
+                            var message = Encoding.UTF8.GetString(data);
+                            await WriteInfoAsync($"receive message: {message}");
+
+                            // 状态上报
+                            if (message.Contains("command", StringComparison.OrdinalIgnoreCase) && message.Contains("status", StringComparison.OrdinalIgnoreCase))
+                            {
+                                await SendAsync(new
+                                {
+                                    MsgType = 5, // status
+                                    StatusCode = (int)Status,
+                                    Message = Status.ToString()
+                                }.ToJson());
+                            }
                         }
                     }
                 }
