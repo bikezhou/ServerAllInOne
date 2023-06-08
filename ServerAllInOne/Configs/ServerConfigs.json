@@ -1,0 +1,30 @@
+{
+  "Servers": [
+
+    {
+      "Name": "WSR",
+      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerDynamicCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerDynamicCore.exe",
+      "Arguments": "",
+      "Sort": 2
+    },
+    {
+      "Name": "WSA",
+      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerAgentCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerAgentCore.exe",
+      "Arguments": "",
+      "Sort": 1
+    },
+    {
+      "Name": "WS",
+      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerCore.exe",
+      "Arguments": "",
+      "Sort": 0
+    },
+    {
+      "Name": "Socket设备客户端",
+      "ExePath": "C:\\Users\\abc\\source\\repos\\SocketClient\\SocketClientAgent\\bin\\Debug\\net6.0\\SocketClientAgent.exe",
+      "Arguments": "127.0.0.1 5680",
+      "CanInput": true,
+      "Sort": 3
+    }
+  ]
+}
