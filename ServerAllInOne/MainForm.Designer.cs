@@ -43,6 +43,8 @@
             cmsMain = new ContextMenuStrip(components);
             tsmiOpenMainForm = new ToolStripMenuItem();
             tsmiExit = new ToolStripMenuItem();
+            tsmiMainStartServer = new ToolStripMenuItem();
+            tsmiMainStopServer = new ToolStripMenuItem();
             tabHome.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             tabControl.SuspendLayout();
@@ -160,23 +162,37 @@
             // 
             // cmsMain
             // 
-            cmsMain.Items.AddRange(new ToolStripItem[] { tsmiOpenMainForm, tsmiExit });
+            cmsMain.Items.AddRange(new ToolStripItem[] { tsmiOpenMainForm, tsmiMainStartServer, tsmiMainStopServer, tsmiExit });
             cmsMain.Name = "cmsMain";
-            cmsMain.Size = new Size(137, 48);
+            cmsMain.Size = new Size(181, 114);
             // 
             // tsmiOpenMainForm
             // 
             tsmiOpenMainForm.Name = "tsmiOpenMainForm";
-            tsmiOpenMainForm.Size = new Size(136, 22);
+            tsmiOpenMainForm.Size = new Size(180, 22);
             tsmiOpenMainForm.Text = "打开主界面";
             tsmiOpenMainForm.Click += tsmiOpenMainForm_Click;
             // 
             // tsmiExit
             // 
             tsmiExit.Name = "tsmiExit";
-            tsmiExit.Size = new Size(136, 22);
+            tsmiExit.Size = new Size(180, 22);
             tsmiExit.Text = "退出";
             tsmiExit.Click += tsmiExit_Click;
+            // 
+            // tsmiMainStartServer
+            // 
+            tsmiMainStartServer.Name = "tsmiMainStartServer";
+            tsmiMainStartServer.Size = new Size(180, 22);
+            tsmiMainStartServer.Text = "启动服务";
+            tsmiMainStartServer.Click += tsmiMainStartServer_Click;
+            // 
+            // tsmiMainStopServer
+            // 
+            tsmiMainStopServer.Name = "tsmiMainStopServer";
+            tsmiMainStopServer.Size = new Size(180, 22);
+            tsmiMainStopServer.Text = "停止服务";
+            tsmiMainStopServer.Click += tsmiMainStopServer_Click;
             // 
             // MainForm
             // 
@@ -213,5 +229,7 @@
         private ContextMenuStrip cmsMain;
         private ToolStripMenuItem tsmiOpenMainForm;
         private ToolStripMenuItem tsmiExit;
+        private ToolStripMenuItem tsmiMainStartServer;
+        private ToolStripMenuItem tsmiMainStopServer;
     }
 }

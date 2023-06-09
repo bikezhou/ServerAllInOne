@@ -261,7 +261,7 @@ namespace ServerAllInOne.Controls
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Enter && (ServerConfig?.CanInput ?? false))
+            if (e.KeyCode == Keys.Enter)
             {
                 var input = txtInput.Text;
                 try

@@ -35,11 +35,20 @@ namespace ServerAllInOne
         {
             if (ConfirmExit)
             {
+                if (runningServerCount > 0)
+                {
+                    if (MessageBox.Show("服务运行中，是否停止所有服务？", "停止服务", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
                 StopAllServer();
             }
             else
             {
                 Hide();
+                notifyIcon.ShowBalloonTip(100, "提示信息", "程序已最小化到桌面右下角", ToolTipIcon.Info);
                 e.Cancel = true;
             }
         }
@@ -120,7 +129,7 @@ namespace ServerAllInOne
 
         private void btnStartServer_Click(object sender, EventArgs e)
         {
-            if (MessageBox.Show("是否一键启动所有服务？", "启动服务", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+            if (MessageBox.Show("是否启动所有服务？", "启动服务", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
             {
                 return;
             }
@@ -133,7 +142,7 @@ namespace ServerAllInOne
             if (runningServerCount == 0)
                 return;
 
-            if (MessageBox.Show("是否一键停止已启动服务？", "停止服务", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            if (MessageBox.Show("是否停止已启动服务？", "停止服务", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             {
                 return;
             }
@@ -283,6 +292,16 @@ namespace ServerAllInOne
         private void notifyIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             tsmiOpenMainForm_Click(tsmiOpenMainForm, EventArgs.Empty);
+        }
+
+        private void tsmiMainStartServer_Click(object sender, EventArgs e)
+        {
+            btnStartServer_Click(btnStartServer, EventArgs.Empty);
+        }
+
+        private void tsmiMainStopServer_Click(object sender, EventArgs e)
+        {
+            btnStopServer_Click(btnStopServer, EventArgs.Empty);
         }
     }
 }
