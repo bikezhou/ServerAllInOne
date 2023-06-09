@@ -13,8 +13,6 @@ namespace SocketClientAgent
 
         public int ServerPort { get; }
 
-        public string Module { get; set; } = "Equipment";
-
         public Client? CurrentClient { get; private set; }
 
         public List<Client> Clients { get; }
@@ -43,12 +41,6 @@ namespace SocketClientAgent
             if (!client.IsConnected)
             {
                 client.Connect();
-
-                _ = client.SendAsync(new
-                {
-                    MsgType = 1,
-                    IdentityId = $"{Module}.{clientName}"
-                }.ToJson());
             }
             else
             {
@@ -65,12 +57,6 @@ namespace SocketClientAgent
             var client = GetClient(clientName);
             if (client != null)
             {
-                _ = client.SendAsync(new
-                {
-                    MsgType = 3,
-                    IdentityId = $"{Module}.{clientName}"
-                }.ToJson());
-
                 client.Disconnect();
             }
         }

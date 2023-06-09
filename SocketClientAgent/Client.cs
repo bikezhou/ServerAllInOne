@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
+using System.Reflection;
 
 namespace SocketClientAgent
 {
@@ -15,6 +16,7 @@ namespace SocketClientAgent
         Running,
         Pause,
         EmergencyStop,
+        NotReady,
         Error,
     }
 
@@ -22,6 +24,8 @@ namespace SocketClientAgent
     {
         private Socket socket;
         private bool isConnected;
+
+        public string Module { get; set; } = "Equipment";
 
         public string ClientName { get; set; }
 
@@ -54,10 +58,9 @@ namespace SocketClientAgent
             if (isConnected)
                 return;
 
-            if (socket != null)
-            {
-                socket.Dispose();
-            }
+            socket?.Dispose();
+
+            _ = WriteInfoAsync("connecting...");
 
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -72,26 +75,33 @@ namespace SocketClientAgent
                     }
                     catch (Exception ex)
                     {
+                        isConnected = false;
                         await WriteInfoAsync($"receive message error:: {ex.Message}");
+                    }
+                    finally
+                    {
                         await Task.Run(async () =>
                         {
-                            while (!isConnected)
+                            while (true)
                             {
                                 await Task.Delay(3000);
                                 Connect();
+
+                                if (isConnected)
+                                {
+                                    break;
+                                }
                             }
                         });
                     }
-
-                    isConnected = false;
                 });
 
                 isConnected = true;
+                _ = SendIdentityAsync();
             }
             catch (Exception ex)
             {
                 _ = WriteErrorAsync($"connect error: {ex.Message}");
-                throw;
             }
         }
 
@@ -99,6 +109,8 @@ namespace SocketClientAgent
         {
             if (!isConnected)
                 return;
+
+            _ = SendOfflineAsync();
 
             try
             {
@@ -172,21 +184,38 @@ namespace SocketClientAgent
                             try
                             {
                                 var jObj = JObject.Parse(message);
-                                if (jObj.TryGetValue<string>("command", out string? command))
-                                {
-                                    if (!string.IsNullOrEmpty(command))
-                                    {
-                                        switch (command.ToLower())
-                                        {
-                                            case "start":
-                                                SetStatus(ClientStatus.Running);
-                                                break;
-                                            case "status": // 状态上报
-                                                await SendStatusAsync();
-                                                break;
-                                        }
-                                    }
 
+                                if (jObj.TryGetValue("msgtype", out int type))
+                                {
+                                    switch (type)
+                                    {
+                                        case 1:
+                                            await SendIdentityAsync();
+                                            break;
+                                        case 4:
+                                            if (jObj.TryGetValue("command", out string? command))
+                                            {
+                                                if (!string.IsNullOrEmpty(command))
+                                                {
+                                                    switch (command.ToLower())
+                                                    {
+                                                        case "start":
+                                                            SetStatus(ClientStatus.Running);
+                                                            break;
+                                                        case "pause":
+                                                            SetStatus(ClientStatus.Pause);
+                                                            break;
+                                                        case "abort":
+                                                            SetStatus(ClientStatus.EmergencyStop);
+                                                            break;
+                                                        case "status": // 状态上报
+                                                            await SendStatusAsync();
+                                                            break;
+                                                    }
+                                                }
+                                            }
+                                            break;
+                                    }
                                 }
                             }
                             catch (Exception)
@@ -228,6 +257,33 @@ namespace SocketClientAgent
             {
                 slimlock.Release();
             }
+        }
+
+        public async Task SendIdentityAsync()
+        {
+            await SendAsync(new
+            {
+                MsgType = 1,
+                IdentityId = $"{Module}.{ClientName}"
+            }.ToJson());
+        }
+
+        public async Task SendOnlineAsync()
+        {
+            await SendAsync(new
+            {
+                MsgType = 2,
+                IdentityId = $"{Module}.{ClientName}"
+            }.ToJson());
+        }
+
+        public async Task SendOfflineAsync()
+        {
+            await SendAsync(new
+            {
+                MsgType = 3,
+                IdentityId = $"{Module}.{ClientName}"
+            }.ToJson());
         }
 
         /// <summary>
