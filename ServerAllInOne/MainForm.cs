@@ -11,6 +11,7 @@ namespace ServerAllInOne
         ServerConfigs configs;
 
         private int runningServerCount = 0;
+        private int serverCount = 0;
 
         public bool ConfirmExit { get; set; }
         public MainForm()
@@ -48,7 +49,7 @@ namespace ServerAllInOne
             else
             {
                 Hide();
-                notifyIcon.ShowBalloonTip(100, "提示信息", "程序已最小化到桌面右下角", ToolTipIcon.Info);
+                notifyIcon.ShowBalloonTip(20, "提示信息", "程序已最小化到桌面右下角", ToolTipIcon.Info);
                 e.Cancel = true;
             }
         }
@@ -65,22 +66,31 @@ namespace ServerAllInOne
             tabPage.Controls.Add(serverConsole);
             tabPage.Tag = server;
             tabControl.TabPages.Add(tabPage);
+
+            serverCount++;
         }
 
         private void ServerConsole_ServerStateChanged(object? sender, EventArgs e)
         {
             // 服务状态改变
-
             if (sender is ServerConsole server)
             {
-                if (server.Running)
+                ServerTabForeach(tabPage =>
                 {
-                    runningServerCount++;
-                }
-                else
-                {
-                    runningServerCount--;
-                }
+                    if (tabPage.Controls[0] == server)
+                    {
+                        if (server.Running)
+                        {
+                            tabPage.Text = $"{server.Name}[{server.ProcessId.Value}]";
+                            runningServerCount++;
+                        }
+                        else
+                        {
+                            tabPage.Text = server.Name;
+                            runningServerCount--;
+                        }
+                    }
+                });
             }
 
             UpdateNotifyIcon();
@@ -157,11 +167,6 @@ namespace ServerAllInOne
                 if (tabPage.Controls[0] is ServerConsole server)
                 {
                     server.Start();
-
-                    if (tabPage.Tag is Server c && server.ProcessId.HasValue)
-                    {
-                        tabPage.Text = $"{c.Name}[{server.ProcessId.Value}]";
-                    }
                 }
             });
         }
@@ -174,33 +179,25 @@ namespace ServerAllInOne
                 {
                     server.Stop();
                 }
-
-                if (tabPage.Tag is Server c)
-                {
-                    tabPage.Text = c.Name;
-                }
             });
         }
 
         private void UpdateNotifyIcon()
         {
-            var running = 0;
-            var total = 0;
-            ServerTabForeach(tabPage =>
+            var iconPath = runningServerCount == 0
+                ? @"ServerAllInOne.Assets.Icons.server_windows_stop.ico"
+                : @"ServerAllInOne.Assets.Icons.server_windows.ico";
+
+            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(iconPath);
+            notifyIcon.Icon = stream != null ? new Icon(stream) : null;
+            if (runningServerCount == 0)
             {
-                total++;
-                if (tabPage.Controls[0] is ServerConsole sc && sc.Running)
-                {
-                    running++;
-                }
-            });
-
-            var iconPath = running == 0 ? @"ServerAllInOne.Assets.Icons.server_windows_stop.ico"
-                                        : @"ServerAllInOne.Assets.Icons.server_windows.ico";
-
-            notifyIcon.Icon = new Icon(Assembly.GetExecutingAssembly().GetManifestResourceStream(iconPath));
-
-            notifyIcon.Text = $"正在运行：{running}/{total}";
+                notifyIcon.Text = "未运行";
+            }
+            else
+            {
+                notifyIcon.Text = $"正在运行：{runningServerCount}/{serverCount}";
+            }
         }
 
         private void ServerTabForeach(Action<TabPage> action)
@@ -257,11 +254,6 @@ namespace ServerAllInOne
             if (tabPage.Controls[0] is ServerConsole server)
             {
                 server.Start();
-
-                if (tabPage.Tag is Server c && server.ProcessId.HasValue)
-                {
-                    tabPage.Text = $"{c.Name}[{server.ProcessId.Value}]";
-                }
             }
         }
 
@@ -271,10 +263,6 @@ namespace ServerAllInOne
             if (tabPage.Controls[0] is ServerConsole server)
             {
                 server.Stop();
-            }
-            if (tabPage.Tag is Server c)
-            {
-                tabPage.Text = c.Name;
             }
         }
 

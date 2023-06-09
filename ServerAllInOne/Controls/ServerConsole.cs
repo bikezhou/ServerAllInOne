@@ -117,17 +117,16 @@ namespace ServerAllInOne.Controls
         {
             if (!string.IsNullOrEmpty(e.Data))
             {
-                WriteTextLine("[服务错误]: " + e.Data);
+                WriteTextLine(e.Data);
             }
         }
 
         private void Process_Exited(object? sender, EventArgs e)
         {
-            WriteTextLine("服务已停止");
-
             process = null;
             Running = false;
 
+            WriteTextLine("服务已停止");
             ServerStateChanged?.Invoke(this, EventArgs.Empty);
         }
 
@@ -162,10 +161,6 @@ namespace ServerAllInOne.Controls
                         SetConsoleCtrlHandler(handler, false);
                         FreeConsole();
                     }
-                }
-                else
-                {
-                    return;
                 }
 
                 if (!process.HasExited)
@@ -271,12 +266,14 @@ namespace ServerAllInOne.Controls
                         ClearText();
                         return;
                     }
-
-                    WriteTextLine(input);
-                    if (process != null)
+                    if (ServerConfig?.CanInput ?? false)
                     {
-                        process.StandardInput.WriteLine(input);
-                        process.StandardInput.Flush();
+                        WriteTextLine(input);
+                        if (process != null)
+                        {
+                            process.StandardInput.WriteLine(input);
+                            process.StandardInput.Flush();
+                        }
                     }
                 }
                 finally

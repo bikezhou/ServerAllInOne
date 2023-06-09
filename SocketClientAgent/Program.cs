@@ -125,22 +125,27 @@ namespace SocketClientAgent
 
         public void OnlineClient(string clientName)
         {
-            if (Clients.Any(c => c.ClientName.Equals(clientName, StringComparison.OrdinalIgnoreCase)))
+            var client = Clients.FirstOrDefault(c => c.ClientName.Equals(clientName, StringComparison.OrdinalIgnoreCase));
+            if (client == null)
+            {
+                client = new Client(clientName, ServerIp, ServerPort);
+                Clients.Add(client);
+            }
+            if (!client.IsConnected)
+            {
+
+                client.Connect();
+
+                _ = client.SendAsync(new
+                {
+                    MsgType = 1,
+                    IdentityId = "Equipment." + clientName
+                }.ToJson());
+            }
+            else
             {
                 Console.WriteLine("client {0} already online!", clientName);
-                return;
             }
-
-            var client = new Client(clientName, ServerIp, ServerPort);
-            client.Connect();
-
-            _ = client.SendAsync(new
-            {
-                MsgType = 1,
-                IdentityId = "Equipment." + clientName
-            }.ToJson());
-
-            Clients.Add(client);
         }
 
         public void OfflineClient(string clientName)
@@ -192,6 +197,11 @@ namespace SocketClientAgent
         /// 状态
         /// </summary>
         public ClientStatus Status { get; set; }
+
+        /// <summary>
+        /// 连接状态
+        /// </summary>
+        public bool IsConnected { get; set; }
 
         public string ServerIp { get; }
 
@@ -294,14 +304,27 @@ namespace SocketClientAgent
                             await WriteInfoAsync($"receive message: {message}");
 
                             // 状态上报
-                            if (message.Contains("command", StringComparison.OrdinalIgnoreCase) && message.Contains("status", StringComparison.OrdinalIgnoreCase))
+                            if (message.Contains("command", StringComparison.OrdinalIgnoreCase))
                             {
-                                await SendAsync(new
+                                if (message.Contains("status", StringComparison.OrdinalIgnoreCase))
                                 {
-                                    MsgType = 5, // status
-                                    StatusCode = (int)Status,
-                                    Message = Status.ToString()
-                                }.ToJson());
+                                    await SendAsync(new
+                                    {
+                                        MsgType = 5, // status
+                                        StatusCode = (int)Status,
+                                        Message = Status.ToString()
+                                    }.ToJson());
+                                }
+                                if (message.Contains("start", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    Status = ClientStatus.Running;
+                                    await SendAsync(new
+                                    {
+                                        MsgType = 5, // status
+                                        StatusCode = (int)Status,
+                                        Message = Status.ToString()
+                                    }.ToJson());
+                                }
                             }
                         }
                     }
