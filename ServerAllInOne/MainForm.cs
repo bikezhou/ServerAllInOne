@@ -79,14 +79,15 @@ namespace ServerAllInOne
                 {
                     if (tabPage.Controls[0] == server)
                     {
+                        var c = server.ServerConfig;
                         if (server.Running)
                         {
-                            tabPage.Text = $"{server.Name}[{server.ProcessId.Value}]";
+                            tabPage.Text = $"{c.Name}[{server.ProcessId}]";
                             runningServerCount++;
                         }
                         else
                         {
-                            tabPage.Text = server.Name;
+                            tabPage.Text = c.Name;
                             runningServerCount--;
                         }
                     }
@@ -166,7 +167,7 @@ namespace ServerAllInOne
             {
                 if (tabPage.Controls[0] is ServerConsole server)
                 {
-                    server.Start();
+                    _ = server.StartAsync();
                 }
             });
         }
@@ -177,7 +178,7 @@ namespace ServerAllInOne
             {
                 if (tabPage.Controls[0] is ServerConsole server)
                 {
-                    server.Stop();
+                    _ = server.StopAsync();
                 }
             });
         }
@@ -253,7 +254,7 @@ namespace ServerAllInOne
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
             {
-                server.Start();
+                _ = server.StartAsync();
             }
         }
 
@@ -262,7 +263,7 @@ namespace ServerAllInOne
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
             {
-                server.Stop();
+                _ = server.StopAsync();
             }
         }
 

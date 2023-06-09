@@ -32,18 +32,38 @@ namespace ServerAllInOne.Controls
         }
         #endregion
 
-        Process? process;
+        private Process? process;
+        private bool running;
 
-        public int? ProcessId
+        private readonly static SemaphoreSlim slim = new(1);
+
+        /// <summary>
+        /// 进程ID
+        /// </summary>
+        public int ProcessId
         {
-            get => process?.Id;
+            get => process?.Id ?? 0;
         }
 
+        /// <summary>
+        /// 运行中
+        /// </summary>
+        public bool Running => running;
+
+        /// <summary>
+        /// 服务配置
+        /// </summary>
+        public Server ServerConfig { get; set; }
+
+        /// <summary>
+        /// 服务执行状态改变
+        /// </summary>
         public event EventHandler<EventArgs> ServerStateChanged;
 
         public ServerConsole()
         {
             InitializeComponent();
+
             Load += ServerConsole_Load;
             Disposed += ServerConsole_Disposed;
         }
@@ -58,13 +78,9 @@ namespace ServerAllInOne.Controls
             Stop();
         }
 
-        public bool Running { get; private set; }
-
-        public Server ServerConfig { get; set; }
-
         public void Start()
         {
-            if (Running)
+            if (running)
                 return;
 
             ClearText();
@@ -88,17 +104,25 @@ namespace ServerAllInOne.Controls
 
                 if (process != null)
                 {
+                    /**
+                     * 开启EnableRaisingEvents以触发Exited事件
+                     * 默认为false
+                     * 为false时要调用HasExited属性才会触发Exited事件
+                     */
+                    process.EnableRaisingEvents = true;
                     process.Exited += Process_Exited;
                     process.OutputDataReceived += Process_OutputDataReceived;
                     process.BeginOutputReadLine();
                     process.ErrorDataReceived += Process_ErrorDataReceived;
                     process.BeginErrorReadLine();
 
-                    Running = true;
+                    running = true;
 
                     WriteTextLine($"服务已启动[进程ID：{process.Id}]");
-
-                    ServerStateChanged?.Invoke(this, EventArgs.Empty);
+                    Invoke(new MethodInvoker(() =>
+                    {
+                        ServerStateChanged?.Invoke(this, EventArgs.Empty);
+                    }));
                 }
             }
             catch (Exception ex)
@@ -107,30 +131,26 @@ namespace ServerAllInOne.Controls
             }
         }
 
-        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        public async Task StartAsync()
         {
-            if (!string.IsNullOrEmpty(e.Data))
+            await Task.Run(() =>
             {
-                WriteTextLine(e.Data);
-            }
-        }
-
-        private void Process_Exited(object? sender, EventArgs e)
-        {
-            process = null;
-            Running = false;
-
-            WriteTextLine("服务已停止");
-            ServerStateChanged?.Invoke(this, EventArgs.Empty);
+                slim.Wait();
+                try
+                {
+                    Start();
+                }
+                finally
+                {
+                    slim.Release();
+                }
+            });
         }
 
         public void Stop()
         {
-            if (Running && process != null)
+            if (running && process != null)
             {
-                process.CancelErrorRead();
-                process.CancelOutputRead();
-
                 // 未成功
                 var handler = new ConsoleCtrlDelegate(c =>
                 {
@@ -147,7 +167,11 @@ namespace ServerAllInOne.Controls
                         if (!GenerateConsoleCtrlEvent((uint)CtrlTypes.CTRL_C_EVENT, 0))
                             return;
 
-                        process.WaitForExit(200);
+                        process.CancelErrorRead();
+                        process.CancelOutputRead();
+
+                        // 等待100ms
+                        process.WaitForExit(100);
                     }
                     finally
                     {
@@ -157,12 +181,48 @@ namespace ServerAllInOne.Controls
                     }
                 }
 
-                if (!process.HasExited)
+                if (running)
                 {
                     WriteTextLine("服务停止失败");
-                    return;
                 }
             }
+        }
+
+        public async Task StopAsync()
+        {
+            await Task.Run(() =>
+            {
+                slim.Wait();
+                try
+                {
+                    Stop();
+                }
+                finally
+                {
+                    slim.Release();
+                }
+            });
+        }
+
+
+        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Data))
+            {
+                WriteTextLine(e.Data);
+            }
+        }
+
+        private void Process_Exited(object? sender, EventArgs e)
+        {
+            process = null;
+            running = false;
+
+            WriteTextLine("服务已停止");
+            Invoke(new MethodInvoker(() =>
+            {
+                ServerStateChanged?.Invoke(this, EventArgs.Empty);
+            }));
         }
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
