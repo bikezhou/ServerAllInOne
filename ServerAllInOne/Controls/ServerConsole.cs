@@ -51,10 +51,6 @@ namespace ServerAllInOne.Controls
         private void ServerConsole_Load(object? sender, EventArgs e)
         {
             WriteTextLine("服务未启动");
-            //if (ServerConfig != null)
-            //{
-            //    txtInput.Visible = ServerConfig.CanInput;
-            //}
         }
 
         private void ServerConsole_Disposed(object? sender, EventArgs e)
@@ -97,8 +93,6 @@ namespace ServerAllInOne.Controls
                     process.BeginOutputReadLine();
                     process.ErrorDataReceived += Process_ErrorDataReceived;
                     process.BeginErrorReadLine();
-
-                    //txtInput.Visible = ServerConfig.CanInput;
 
                     Running = true;
 
