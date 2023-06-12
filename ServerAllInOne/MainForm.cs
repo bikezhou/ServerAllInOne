@@ -14,15 +14,17 @@ namespace ServerAllInOne
         private int serverCount = 0;
 
         public bool ConfirmExit { get; set; }
+
         public MainForm()
         {
             InitializeComponent();
             Load += Form1_Load;
+
+            configs = ServerConfigs.Default;
         }
 
         private void Form1_Load(object? sender, EventArgs e)
         {
-            configs = ServerConfigs.Default;
             configs.Servers.Sort((a, b) => a.Sort - b.Sort);
             foreach (var server in configs.Servers)
             {
@@ -38,7 +40,7 @@ namespace ServerAllInOne
             {
                 if (runningServerCount > 0)
                 {
-                    if (MessageBox.Show("服务运行中，是否停止所有服务？", "停止服务", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    if (MessageBox.Show("服务运行中，是否停止所有运行中的服务并退出程序？", "退出程序", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
                     {
                         e.Cancel = true;
                         return;
@@ -48,9 +50,24 @@ namespace ServerAllInOne
             }
             else
             {
-                Hide();
-                notifyIcon.ShowBalloonTip(20, "提示信息", "程序已最小化到桌面右下角", ToolTipIcon.Info);
-                e.Cancel = true;
+                var exitForm = new ExitConfirmForm();
+                if (exitForm.ShowDialog(this) == DialogResult.OK)
+                {
+                    if (exitForm.SimplyExit)
+                    {
+                        StopAllServer();
+                    }
+                    else
+                    {
+                        Hide();
+                        notifyIcon.ShowBalloonTip(20, "提示信息", "程序已最小化到桌面右下角", ToolTipIcon.Info);
+                        e.Cancel = true;
+                    }
+                }
+                else
+                {
+                    e.Cancel = true;
+                }
             }
         }
 
@@ -123,7 +140,7 @@ namespace ServerAllInOne
         private void btnAddServer_Click(object sender, EventArgs e)
         {
             var addForm = new AddServerForm();
-            if (addForm.ShowDialog() == DialogResult.OK)
+            if (addForm.ShowDialog(this) == DialogResult.OK)
             {
                 if (addForm.Server != null)
                 {
@@ -153,7 +170,7 @@ namespace ServerAllInOne
             if (runningServerCount == 0)
                 return;
 
-            if (MessageBox.Show("是否停止已启动服务？", "停止服务", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+            if (MessageBox.Show("是否停止所有服务？", "停止服务", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
             {
                 return;
             }
@@ -185,20 +202,14 @@ namespace ServerAllInOne
 
         private void UpdateNotifyIcon()
         {
-            var iconPath = runningServerCount == 0
-                ? @"ServerAllInOne.Assets.Icons.server_windows_stop.ico"
-                : @"ServerAllInOne.Assets.Icons.server_windows.ico";
+            var iconPath = runningServerCount > 0
+                    ? "ServerAllInOne.Assets.Icons.server_windows.ico"
+                    : "ServerAllInOne.Assets.Icons.server_windows_stop.ico";
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(iconPath);
+
             notifyIcon.Icon = stream != null ? new Icon(stream) : null;
-            if (runningServerCount == 0)
-            {
-                notifyIcon.Text = "未运行";
-            }
-            else
-            {
-                notifyIcon.Text = $"正在运行：{runningServerCount}/{serverCount}";
-            }
+            notifyIcon.Text = runningServerCount > 0 ? $"正在运行：{runningServerCount}/{serverCount}" : "服务未运行";
         }
 
         private void ServerTabForeach(Action<TabPage> action)

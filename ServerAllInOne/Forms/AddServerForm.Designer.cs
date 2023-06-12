@@ -71,7 +71,7 @@
             // 
             txtExePath.Location = new Point(86, 50);
             txtExePath.Name = "txtExePath";
-            txtExePath.Size = new Size(278, 23);
+            txtExePath.Size = new Size(245, 23);
             txtExePath.TabIndex = 2;
             // 
             // label3
@@ -104,9 +104,10 @@
             // 
             // btnSelect
             // 
-            btnSelect.Location = new Point(327, 50);
+            btnSelect.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            btnSelect.Location = new Point(337, 50);
             btnSelect.Name = "btnSelect";
-            btnSelect.Size = new Size(37, 23);
+            btnSelect.Size = new Size(30, 23);
             btnSelect.TabIndex = 7;
             btnSelect.Text = "...";
             btnSelect.UseVisualStyleBackColor = true;
@@ -123,6 +124,7 @@
             // 
             // nudSort
             // 
+            nudSort.BorderStyle = BorderStyle.FixedSingle;
             nudSort.Location = new Point(86, 110);
             nudSort.Name = "nudSort";
             nudSort.Size = new Size(69, 23);
@@ -142,6 +144,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.White;
             ClientSize = new Size(376, 175);
             Controls.Add(chkCanInput);
             Controls.Add(nudSort);
@@ -156,6 +159,7 @@
             Controls.Add(txtName);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
             Name = "AddServerForm";
+            ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "添加服务";
             ((System.ComponentModel.ISupportInitialize)nudSort).EndInit();

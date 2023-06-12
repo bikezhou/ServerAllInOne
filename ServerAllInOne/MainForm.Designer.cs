@@ -39,14 +39,14 @@
             cmsTabMenu = new ContextMenuStrip(components);
             tsmiStartServer = new ToolStripMenuItem();
             tsmiStopServer = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripSeparator();
+            tsmiRestartServer = new ToolStripMenuItem();
             notifyIcon = new NotifyIcon(components);
             cmsMain = new ContextMenuStrip(components);
             tsmiOpenMainForm = new ToolStripMenuItem();
             tsmiMainStartServer = new ToolStripMenuItem();
             tsmiMainStopServer = new ToolStripMenuItem();
             tsmiExit = new ToolStripMenuItem();
-            toolStripMenuItem1 = new ToolStripSeparator();
-            tsmiRestartServer = new ToolStripMenuItem();
             tabHome.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             tabControl.SuspendLayout();
@@ -137,22 +137,34 @@
             // 
             cmsTabMenu.Items.AddRange(new ToolStripItem[] { tsmiStartServer, tsmiStopServer, toolStripMenuItem1, tsmiRestartServer });
             cmsTabMenu.Name = "contextMenuStrip1";
-            cmsTabMenu.Size = new Size(181, 98);
+            cmsTabMenu.Size = new Size(125, 76);
             cmsTabMenu.Opening += cmsTabMenu_Opening;
             // 
             // tsmiStartServer
             // 
             tsmiStartServer.Name = "tsmiStartServer";
-            tsmiStartServer.Size = new Size(180, 22);
+            tsmiStartServer.Size = new Size(124, 22);
             tsmiStartServer.Text = "启动服务";
             tsmiStartServer.Click += tsmiStartServer_Click;
             // 
             // tsmiStopServer
             // 
             tsmiStopServer.Name = "tsmiStopServer";
-            tsmiStopServer.Size = new Size(180, 22);
+            tsmiStopServer.Size = new Size(124, 22);
             tsmiStopServer.Text = "停止服务";
             tsmiStopServer.Click += tsmiStopServer_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(121, 6);
+            // 
+            // tsmiRestartServer
+            // 
+            tsmiRestartServer.Name = "tsmiRestartServer";
+            tsmiRestartServer.Size = new Size(124, 22);
+            tsmiRestartServer.Text = "重启服务";
+            tsmiRestartServer.Click += tsmiRestartServer_Click;
             // 
             // notifyIcon
             // 
@@ -195,18 +207,6 @@
             tsmiExit.Size = new Size(136, 22);
             tsmiExit.Text = "退出";
             tsmiExit.Click += tsmiExit_Click;
-            // 
-            // toolStripMenuItem1
-            // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(177, 6);
-            // 
-            // tsmiRestartServer
-            // 
-            tsmiRestartServer.Name = "tsmiRestartServer";
-            tsmiRestartServer.Size = new Size(180, 22);
-            tsmiRestartServer.Text = "重启服务";
-            tsmiRestartServer.Click += tsmiRestartServer_Click;
             // 
             // MainForm
             // 

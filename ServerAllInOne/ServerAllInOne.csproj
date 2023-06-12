@@ -15,12 +15,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\Icons\server_windows.ico" />
+    <Content Include="Assets\Icons\server_windows.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\Icons\server_windows.ico" />
-    <EmbeddedResource Include="Assets\Icons\server_windows_stop.ico" />
+    <Content Include="Assets\Icons\server_windows_stop.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
