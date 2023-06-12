@@ -336,5 +336,20 @@ namespace ServerAllInOne.Controls
                 }
             }
         }
+
+        private void cmsRichText_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            tsmiCopy.Enabled = richTextBox.SelectionLength > 0;
+        }
+
+        private void tsmiCopy_Click(object sender, EventArgs e)
+        {
+            richTextBox.Copy();
+        }
+
+        private void tsmiClear_Click(object sender, EventArgs e)
+        {
+            richTextBox.Clear();
+        }
     }
 }

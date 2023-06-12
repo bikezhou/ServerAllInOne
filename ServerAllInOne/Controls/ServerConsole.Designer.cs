@@ -28,14 +28,21 @@
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             richTextBox = new RichTextBox();
+            cmsRichText = new ContextMenuStrip(components);
+            tsmiCopy = new ToolStripMenuItem();
+            toolStripMenuItem1 = new ToolStripSeparator();
+            tsmiClear = new ToolStripMenuItem();
             txtInput = new TextBox();
+            cmsRichText.SuspendLayout();
             SuspendLayout();
             // 
             // richTextBox
             // 
             richTextBox.BackColor = Color.Black;
             richTextBox.BorderStyle = BorderStyle.None;
+            richTextBox.ContextMenuStrip = cmsRichText;
             richTextBox.Dock = DockStyle.Fill;
             richTextBox.Font = new Font("Consolas", 10.5F, FontStyle.Regular, GraphicsUnit.Point);
             richTextBox.ForeColor = Color.Gainsboro;
@@ -45,6 +52,33 @@
             richTextBox.Size = new Size(642, 333);
             richTextBox.TabIndex = 1;
             richTextBox.Text = "";
+            // 
+            // cmsRichText
+            // 
+            cmsRichText.Items.AddRange(new ToolStripItem[] { tsmiCopy, toolStripMenuItem1, tsmiClear });
+            cmsRichText.Name = "cmsMain";
+            cmsRichText.Size = new Size(181, 76);
+            cmsRichText.Opening += cmsRichText_Opening;
+            // 
+            // tsmiCopy
+            // 
+            tsmiCopy.Name = "tsmiCopy";
+            tsmiCopy.ShortcutKeys = Keys.Control | Keys.C;
+            tsmiCopy.Size = new Size(180, 22);
+            tsmiCopy.Text = "复制";
+            tsmiCopy.Click += tsmiCopy_Click;
+            // 
+            // toolStripMenuItem1
+            // 
+            toolStripMenuItem1.Name = "toolStripMenuItem1";
+            toolStripMenuItem1.Size = new Size(177, 6);
+            // 
+            // tsmiClear
+            // 
+            tsmiClear.Name = "tsmiClear";
+            tsmiClear.Size = new Size(180, 22);
+            tsmiClear.Text = "清空(:clear)";
+            tsmiClear.Click += tsmiClear_Click;
             // 
             // txtInput
             // 
@@ -65,6 +99,7 @@
             Controls.Add(txtInput);
             Name = "ServerConsole";
             Size = new Size(642, 350);
+            cmsRichText.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -73,5 +108,9 @@
 
         private RichTextBox richTextBox;
         private TextBox txtInput;
+        private ContextMenuStrip cmsRichText;
+        private ToolStripMenuItem tsmiCopy;
+        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripMenuItem tsmiClear;
     }
 }

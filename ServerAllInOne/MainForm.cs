@@ -237,15 +237,18 @@ namespace ServerAllInOne
 
         private void cmsTabMenu_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var console = tabControl.SelectedTab.Controls[0] as ServerConsole;
-            if (console != null)
+            if (tabControl.SelectedTab.Controls[0] is ServerConsole server)
             {
-                tsmiStartServer.Enabled = !console.Running;
-                tsmiStopServer.Enabled = console.Running;
+                tsmiStartServer.Enabled = !server.Running;
+                tsmiStopServer.Enabled = server.Running;
+                tsmiRestartServer.Enabled = server.Running;
             }
             else
             {
-                tsmiStopServer.Enabled = tsmiStartServer.Enabled = false;
+                tsmiStopServer.Enabled
+                    = tsmiStartServer.Enabled
+                    = tsmiRestartServer.Enabled
+                    = false;
             }
         }
 
@@ -264,6 +267,19 @@ namespace ServerAllInOne
             if (tabPage.Controls[0] is ServerConsole server)
             {
                 _ = server.StopAsync();
+            }
+        }
+
+        private void tsmiRestartServer_Click(object sender, EventArgs e)
+        {
+            var tabPage = tabControl.SelectedTab;
+            if (tabPage.Controls[0] is ServerConsole server)
+            {
+                Task.Run(async () =>
+                {
+                    await server.StopAsync();
+                    await server.StartAsync();
+                });
             }
         }
 

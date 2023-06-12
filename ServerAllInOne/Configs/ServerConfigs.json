@@ -1,11 +1,10 @@
 {
   "Servers": [
-
     {
-      "Name": "WSR",
-      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerDynamicCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerDynamicCore.exe",
+      "Name": "WS",
+      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerCore.exe",
       "Arguments": "",
-      "Sort": 2
+      "Sort": 0
     },
     {
       "Name": "WSA",
@@ -14,17 +13,24 @@
       "Sort": 1
     },
     {
-      "Name": "WS",
-      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerCore.exe",
+      "Name": "WSR",
+      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerDynamicCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerDynamicCore.exe",
       "Arguments": "",
-      "Sort": 0
+      "Sort": 2
+    },
+    {
+      "Name": "WebApi服务端",
+      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\LKFrameworkCloud\\LKFrameworkCloud\\LKWorksCloud_Core\\Evget.WebServerAPICore\\bin\\Debug\\net6.0\\Evget.LKWordsCloudService.exe",
+      "Arguments": "",
+      "CanInput": true,
+      "Sort": 3
     },
     {
       "Name": "Socket设备客户端",
       "ExePath": "F:\\Other\\Projects\\ServerAllInOne\\SocketClientAgent\\bin\\Debug\\net6.0\\SocketClientAgent.exe",
       "Arguments": "127.0.0.1 5680",
       "CanInput": true,
-      "Sort": 3
+      "Sort": 4
     }
   ]
 }
