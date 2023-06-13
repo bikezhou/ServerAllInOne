@@ -1,4 +1,6 @@
-﻿namespace ServerAllInOne
+﻿using ServerAllInOne.Controls;
+
+namespace ServerAllInOne
 {
     partial class MainForm
     {
@@ -35,6 +37,7 @@
             btnStopServer = new Button();
             btnAddServer = new Button();
             btnStartServer = new Button();
+            lstbServers = new ServerList();
             tabControl = new TabControl();
             cmsTabMenu = new ContextMenuStrip(components);
             tsmiStartServer = new ToolStripMenuItem();
@@ -76,6 +79,7 @@
             tableLayoutPanel.Controls.Add(btnStopServer, 3, 1);
             tableLayoutPanel.Controls.Add(btnAddServer, 1, 1);
             tableLayoutPanel.Controls.Add(btnStartServer, 2, 1);
+            tableLayoutPanel.Controls.Add(lstbServers, 1, 2);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(3, 3);
             tableLayoutPanel.Name = "tableLayoutPanel";
@@ -120,6 +124,19 @@
             btnStartServer.Text = "启动服务";
             btnStartServer.UseVisualStyleBackColor = true;
             btnStartServer.Click += btnStartServer_Click;
+            // 
+            // lstbServers
+            // 
+            tableLayoutPanel.SetColumnSpan(lstbServers, 3);
+            lstbServers.Dock = DockStyle.Fill;
+            lstbServers.DrawMode = DrawMode.OwnerDrawFixed;
+            lstbServers.FormattingEnabled = true;
+            lstbServers.ItemHeight = 24;
+            lstbServers.Location = new Point(303, 280);
+            lstbServers.Name = "lstbServers";
+            lstbServers.Size = new Size(354, 212);
+            lstbServers.TabIndex = 3;
+            lstbServers.DrawItem += lstbServers_DrawItem;
             // 
             // tabControl
             // 
@@ -247,5 +264,6 @@
         private ToolStripMenuItem tsmiMainStopServer;
         private ToolStripSeparator toolStripMenuItem1;
         private ToolStripMenuItem tsmiRestartServer;
+        private ServerList lstbServers;
     }
 }

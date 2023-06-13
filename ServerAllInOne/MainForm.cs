@@ -28,7 +28,7 @@ namespace ServerAllInOne
             configs.Servers.Sort((a, b) => a.Sort - b.Sort);
             foreach (var server in configs.Servers)
             {
-                AddServerTab(server);
+                AddServerUI(server);
             }
 
             UpdateNotifyIcon();
@@ -71,7 +71,7 @@ namespace ServerAllInOne
             }
         }
 
-        private void AddServerTab(Server server)
+        private void AddServerUI(Server server)
         {
             var tabPage = new TabPage(server.Name);
             var serverConsole = new ServerConsole()
@@ -80,8 +80,17 @@ namespace ServerAllInOne
                 ServerConfig = server
             };
             serverConsole.ServerStateChanged += ServerConsole_ServerStateChanged;
+
+            var listItem = new ServerListItem
+            {
+                Name = server.Name,
+                Running = serverConsole.Running,
+                ProcessId = serverConsole.ProcessId,
+            };
+            lstbServers.Items.Add(listItem);
+
             tabPage.Controls.Add(serverConsole);
-            tabPage.Tag = server;
+            tabPage.Tag = listItem;
             tabControl.TabPages.Add(tabPage);
 
             serverCount++;
@@ -107,8 +116,16 @@ namespace ServerAllInOne
                             tabPage.Text = c.Name;
                             runningServerCount--;
                         }
+
+                        if (tabPage.Tag is ServerListItem item)
+                        {
+                            item.Running = server.Running;
+                            item.ProcessId = server.ProcessId;
+                        }
                     }
                 });
+
+                lstbServers.Refresh();
             }
 
             UpdateNotifyIcon();
@@ -148,7 +165,7 @@ namespace ServerAllInOne
                     configs.Servers.Sort((a, b) => a.Sort - b.Sort);
                     configs.Save();
 
-                    AddServerTab(addForm.Server);
+                    AddServerUI(addForm.Server);
 
                     SortServerTab();
                 }
@@ -318,6 +335,11 @@ namespace ServerAllInOne
         private void tsmiMainStopServer_Click(object sender, EventArgs e)
         {
             btnStopServer_Click(btnStopServer, EventArgs.Empty);
+        }
+
+        private void lstbServers_DrawItem(object sender, DrawItemEventArgs e)
+        {
+            var rect = e.Bounds;
         }
     }
 }

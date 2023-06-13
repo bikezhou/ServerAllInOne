@@ -1,6 +1,7 @@
 ﻿using ServerAllInOne.Configs;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace ServerAllInOne.Controls
 {
@@ -99,7 +100,8 @@ namespace ServerAllInOne.Controls
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    CreateNoWindow = true
+                    CreateNoWindow = true,
+                    WorkingDirectory = Path.GetDirectoryName(ServerConfig.ExePath)
                 });
 
                 if (process != null)
@@ -119,10 +121,10 @@ namespace ServerAllInOne.Controls
                     running = true;
 
                     WriteTextLine($"服务已启动[进程ID：{process.Id}]");
-                    Invoke(new MethodInvoker(() =>
+                    UIInvoke(() =>
                     {
                         ServerStateChanged?.Invoke(this, EventArgs.Empty);
-                    }));
+                    });
                 }
             }
             catch (Exception ex)
@@ -219,10 +221,10 @@ namespace ServerAllInOne.Controls
             running = false;
 
             WriteTextLine("服务已停止");
-            Invoke(new MethodInvoker(() =>
+            UIInvoke(() =>
             {
                 ServerStateChanged?.Invoke(this, EventArgs.Empty);
-            }));
+            });
         }
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -240,72 +242,112 @@ namespace ServerAllInOne.Controls
 
         private void WriteText(string? text)
         {
+            UIInvoke(() =>
+            {
+                if (string.IsNullOrEmpty(text))
+                    return;
+
+                try
+                {
+                    var focused = richTextBox.Focused;
+                    var start = richTextBox.SelectionStart;
+                    var length = richTextBox.SelectionLength;
+                    var autoScroll = start == richTextBox.TextLength;
+
+                    if (focused)
+                    {
+                        txtInput.Focus();
+                    }
+
+                    richTextBox.AppendText(text);
+                    if (autoScroll)
+                    {
+                        richTextBox.SelectionStart = richTextBox.TextLength;
+                        richTextBox.ScrollToCaret();
+                    }
+                    else
+                    {
+                        richTextBox.SelectionStart = start;
+                        richTextBox.SelectionLength = length;
+                    }
+                    if (focused)
+                    {
+                        richTextBox.Focus();
+                    }
+
+                    // 最多保留1000行
+                    var lines = richTextBox.Lines;
+                    var maxline = 1000;
+                    if (lines.Length > maxline)
+                    {
+                        var count = 0;
+                        for (int i = 0; i < lines.Length - maxline; i++)
+                        {
+                            count += lines[i].Length;
+                        }
+
+                        richTextBox.Lines = lines.Skip(lines.Length - maxline).ToArray();
+                        if (autoScroll)
+                        {
+                            richTextBox.SelectionStart = richTextBox.TextLength;
+                        }
+                        else
+                        {
+                            richTextBox.SelectionStart = Math.Max(0, start - count);
+                        }
+                    }
+                }
+                catch (ObjectDisposedException)
+                {
+
+                }
+            });
+        }
+
+        private void UIInvoke(Action action)
+        {
+            if (action == null)
+                return;
+
             if (InvokeRequired)
             {
-                Invoke(new MethodInvoker(() =>
-                {
-                    WriteText(text);
-                }));
-                return;
-            }
-
-            if (string.IsNullOrEmpty(text))
-                return;
-
-            richTextBox.SuspendLayout();
-            var start = richTextBox.SelectionStart;
-            var length = richTextBox.SelectionLength;
-            var autoScroll = start == richTextBox.TextLength;
-
-            richTextBox.AppendText(text);
-            if (autoScroll)
-            {
-                richTextBox.SelectionStart = richTextBox.TextLength;
-                richTextBox.ScrollToCaret();
+                Invoke(action);
             }
             else
             {
-                richTextBox.SelectionStart = start;
-                richTextBox.SelectionLength = length;
+                action();
             }
-
-            // 最多保留1000行
-            var lines = richTextBox.Lines;
-            var maxline = 1000;
-            if (lines.Length > maxline)
-            {
-                var count = 0;
-                for (int i = 0; i < lines.Length - maxline; i++)
-                {
-                    count += lines[i].Length;
-                }
-
-                richTextBox.Lines = lines.Skip(lines.Length - maxline).ToArray();
-                if (autoScroll)
-                {
-                    richTextBox.SelectionStart = richTextBox.TextLength;
-                }
-                else
-                {
-                    richTextBox.SelectionStart = Math.Max(0, start - count);
-                }
-            }
-
-            richTextBox.ResumeLayout(true);
         }
 
+        /// <summary>
+        /// 清空
+        /// </summary>
         private void ClearText()
         {
-            if (InvokeRequired)
+            UIInvoke(() =>
             {
-                Invoke(new MethodInvoker(() =>
-                {
-                    ClearText();
-                }));
-                return;
-            }
+                richTextBox.Clear();
+            });
+        }
 
-            richTextBox.Clear();
+        private void ReturnTop()
+        {
+            UIInvoke(() =>
+            {
+                richTextBox.SelectionStart = 0;
+                richTextBox.SelectionLength = 0;
+                richTextBox.ScrollToCaret();
+            });
+        }
+
+        private void ReturnBottom()
+        {
+            UIInvoke(() =>
+            {
+                richTextBox.SelectionStart = richTextBox.TextLength;
+                richTextBox.SelectionLength = 0;
+                richTextBox.ScrollToCaret();
+            });
         }
 
         private void txtInput_KeyDown(object sender, KeyEventArgs e)
@@ -315,11 +357,19 @@ namespace ServerAllInOne.Controls
                 var input = txtInput.Text;
                 try
                 {
-                    if (input == ":clear")
+                    switch (input)
                     {
-                        ClearText();
-                        return;
+                        case ":clear":
+                            ClearText();
+                            return;
+                        case ":top":
+                            ReturnTop();
+                            return;
+                        case ":bottom":
+                            ReturnBottom();
+                            return;
                     }
+
                     if (ServerConfig?.CanInput ?? false)
                     {
                         WriteTextLine(input);
@@ -349,7 +399,17 @@ namespace ServerAllInOne.Controls
 
         private void tsmiClear_Click(object sender, EventArgs e)
         {
-            richTextBox.Clear();
+            ClearText();
+        }
+
+        private void tsmiReturnTop_Click(object sender, EventArgs e)
+        {
+            ReturnTop();
+        }
+
+        private void tsmiReturnBottom_Click(object sender, EventArgs e)
+        {
+            ReturnBottom();
         }
     }
 }

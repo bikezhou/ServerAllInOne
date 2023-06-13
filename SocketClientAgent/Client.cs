@@ -60,7 +60,7 @@ namespace SocketClientAgent
 
             socket?.Dispose();
 
-            _ = WriteInfoAsync("connecting...");
+            _ = WriteInfoAsync($"connecting... -> {ServerIp}:{ServerPort}");
 
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 
@@ -82,16 +82,8 @@ namespace SocketClientAgent
                     {
                         await Task.Run(async () =>
                         {
-                            while (true)
-                            {
-                                await Task.Delay(3000);
-                                Connect();
-
-                                if (isConnected)
-                                {
-                                    break;
-                                }
-                            }
+                            await Task.Delay(3000);
+                            Connect();
                         });
                     }
                 });
@@ -102,6 +94,12 @@ namespace SocketClientAgent
             catch (Exception ex)
             {
                 _ = WriteErrorAsync($"connect error: {ex.Message}");
+
+                Task.Run(async () =>
+                {
+                    await Task.Delay(3000);
+                    Connect();
+                });
             }
         }
 
