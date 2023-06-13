@@ -8,12 +8,21 @@ namespace ServerAllInOne
 {
     public partial class MainForm : Form
     {
-        ServerConfigs configs;
+        private readonly ServerConfigs configs;
 
         private int runningServerCount = 0;
         private int serverCount = 0;
 
-        public bool ConfirmExit { get; set; }
+        public bool ConfirmExit { get; private set; }
+
+        /// <summary>
+        /// œ‘ æServer¡–±Ì
+        /// </summary>
+        public bool ShowServerList
+        {
+            get => lstbServers.Visible;
+            set => lstbServers.Visible = value;
+        }
 
         public MainForm()
         {

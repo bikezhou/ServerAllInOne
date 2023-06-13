@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "ServerAllInOne": {
+      "commandName": "Project"
+    },
+    "ServerAllInOne --list": {
+      "commandName": "Project",
+      "commandLineArgs": "--list"
+    }
+  }
+}
