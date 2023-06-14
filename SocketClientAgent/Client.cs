@@ -12,11 +12,11 @@ namespace SocketClientAgent
 {
     internal enum ClientStatus
     {
-        Idle,
+        Available,
+        Wait,
         Running,
         Pause,
         EmergencyStop,
-        NotReady,
         Error,
     }
 
@@ -24,6 +24,7 @@ namespace SocketClientAgent
     {
         private Socket socket;
         private bool isConnected;
+        private bool isManualDisconnect = false;
 
         public string Module { get; set; } = "Equipment";
 
@@ -60,6 +61,8 @@ namespace SocketClientAgent
 
             socket?.Dispose();
 
+            isManualDisconnect = false;
+
             _ = WriteInfoAsync($"connecting... -> {ServerIp}:{ServerPort}");
 
             socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -80,11 +83,14 @@ namespace SocketClientAgent
                     }
                     finally
                     {
-                        await Task.Run(async () =>
+                        if (!isManualDisconnect)
                         {
-                            await Task.Delay(3000);
-                            Connect();
-                        });
+                            await Task.Run(async () =>
+                            {
+                                await Task.Delay(3000);
+                                Connect();
+                            });
+                        }
                     }
                 });
 
@@ -107,6 +113,8 @@ namespace SocketClientAgent
         {
             if (!isConnected)
                 return;
+
+            isManualDisconnect = true;
 
             _ = SendOfflineAsync();
 
