@@ -36,7 +36,7 @@ namespace ServerAllInOne
             var currentCommandLine = GetProcessCommandLine(currentProcessId);
             var currentLocation = GetProcessLocation(currentCommandLine);
 
-            var procs = Process.GetProcessesByName("Evget.LKWorksCloudLauncher");
+            var procs = Process.GetProcessesByName("ServerAllInOne");
             foreach (var proc in procs)
             {
                 if (proc.Id == currentProcessId)
