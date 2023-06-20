@@ -259,11 +259,10 @@ namespace ServerAllInOne
                     if (tabControl.GetTabRect(i).Contains(new Point(e.X, e.Y)))
                     {
                         tabControl.SelectedTab = tabPage;
+                        tabControl.ContextMenuStrip = cmsTabMenu;
                         break;
                     }
                 }
-
-                tabControl.ContextMenuStrip = cmsTabMenu;
             }
         }
 

@@ -12,7 +12,8 @@ namespace SocketClientAgent
 {
     internal enum ClientStatus
     {
-        Available,
+        Offline,
+        Available = 1,
         Wait,
         Running,
         Pause,
@@ -22,9 +23,12 @@ namespace SocketClientAgent
 
     internal class Client
     {
+        private static readonly Random random = new();
+
         private Socket socket;
         private bool isConnected;
         private bool isManualDisconnect = false;
+        private ClientStatus status = ClientStatus.Available;
 
         public string Module { get; set; } = "Equipment";
 
@@ -33,8 +37,28 @@ namespace SocketClientAgent
         /// <summary>
         /// 状态
         /// </summary>
-        public ClientStatus Status { get; private set; }
+        public ClientStatus Status
+        {
+            get => status;
+            private set
+            {
+                if (status != value)
+                {
+                    if (value == ClientStatus.Running)
+                    {
+                        Task.Run(async () =>
+                        {
+                            await Task.Delay(random.Next(1000, 10000));
+                            SetStatus(ClientStatus.Available);
+                        });
+                    }
 
+                    var c = this;
+                    Console.WriteLine("[{0}]: status {1}->{2} {3}", c.ClientName, c.Status, status, c.IsConnected ? "online" : "offline");
+                    status = value;
+                }
+            }
+        }
         /// <summary>
         /// 连接状态
         /// </summary>
@@ -212,6 +236,7 @@ namespace SocketClientAgent
                                                             SetStatus(ClientStatus.Pause);
                                                             break;
                                                         case "abort":
+                                                        case "emergencystop":
                                                             SetStatus(ClientStatus.EmergencyStop);
                                                             break;
                                                         case "status": // 状态上报

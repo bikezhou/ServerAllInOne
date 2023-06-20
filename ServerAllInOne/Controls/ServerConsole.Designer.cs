@@ -32,11 +32,12 @@
             richTextBox = new RichTextBox();
             cmsRichText = new ContextMenuStrip(components);
             tsmiCopy = new ToolStripMenuItem();
-            toolStripMenuItem1 = new ToolStripSeparator();
+            tsmiSeparator = new ToolStripSeparator();
             tsmiReturnTop = new ToolStripMenuItem();
             tsmiReturnBottom = new ToolStripMenuItem();
             tsmiClear = new ToolStripMenuItem();
             txtInput = new TextBox();
+            tsmiSeparator1 = new ToolStripSeparator();
             cmsRichText.SuspendLayout();
             SuspendLayout();
             // 
@@ -57,42 +58,42 @@
             // 
             // cmsRichText
             // 
-            cmsRichText.Items.AddRange(new ToolStripItem[] { tsmiCopy, toolStripMenuItem1, tsmiReturnTop, tsmiReturnBottom, tsmiClear });
+            cmsRichText.Items.AddRange(new ToolStripItem[] { tsmiCopy, tsmiSeparator, tsmiReturnTop, tsmiReturnBottom, tsmiClear, tsmiSeparator1 });
             cmsRichText.Name = "cmsMain";
-            cmsRichText.Size = new Size(179, 98);
+            cmsRichText.Size = new Size(181, 126);
             cmsRichText.Opening += cmsRichText_Opening;
             // 
             // tsmiCopy
             // 
             tsmiCopy.Name = "tsmiCopy";
             tsmiCopy.ShortcutKeys = Keys.Control | Keys.C;
-            tsmiCopy.Size = new Size(178, 22);
+            tsmiCopy.Size = new Size(180, 22);
             tsmiCopy.Text = "复制";
             tsmiCopy.Click += tsmiCopy_Click;
             // 
-            // toolStripMenuItem1
+            // tsmiSeparator
             // 
-            toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(175, 6);
+            tsmiSeparator.Name = "tsmiSeparator";
+            tsmiSeparator.Size = new Size(177, 6);
             // 
             // tsmiReturnTop
             // 
             tsmiReturnTop.Name = "tsmiReturnTop";
-            tsmiReturnTop.Size = new Size(178, 22);
+            tsmiReturnTop.Size = new Size(180, 22);
             tsmiReturnTop.Text = "回到顶部(:top)";
             tsmiReturnTop.Click += tsmiReturnTop_Click;
             // 
             // tsmiReturnBottom
             // 
             tsmiReturnBottom.Name = "tsmiReturnBottom";
-            tsmiReturnBottom.Size = new Size(178, 22);
+            tsmiReturnBottom.Size = new Size(180, 22);
             tsmiReturnBottom.Text = "回到底部(:bottom)";
             tsmiReturnBottom.Click += tsmiReturnBottom_Click;
             // 
             // tsmiClear
             // 
             tsmiClear.Name = "tsmiClear";
-            tsmiClear.Size = new Size(178, 22);
+            tsmiClear.Size = new Size(180, 22);
             tsmiClear.Text = "清空(:clear)";
             tsmiClear.Click += tsmiClear_Click;
             // 
@@ -106,6 +107,11 @@
             txtInput.Size = new Size(642, 17);
             txtInput.TabIndex = 0;
             txtInput.KeyDown += txtInput_KeyDown;
+            // 
+            // tsmiSeparator1
+            // 
+            tsmiSeparator1.Name = "tsmiSeparator1";
+            tsmiSeparator1.Size = new Size(177, 6);
             // 
             // ServerConsole
             // 
@@ -126,9 +132,10 @@
         private TextBox txtInput;
         private ContextMenuStrip cmsRichText;
         private ToolStripMenuItem tsmiCopy;
-        private ToolStripSeparator toolStripMenuItem1;
+        private ToolStripSeparator tsmiSeparator;
         private ToolStripMenuItem tsmiClear;
         private ToolStripMenuItem tsmiReturnTop;
         private ToolStripMenuItem tsmiReturnBottom;
+        private ToolStripSeparator tsmiSeparator1;
     }
 }

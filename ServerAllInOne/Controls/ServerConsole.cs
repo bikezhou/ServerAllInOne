@@ -33,10 +33,11 @@ namespace ServerAllInOne.Controls
         }
         #endregion
 
+        private readonly static SemaphoreSlim slim = new(1);
+
         private Process? process;
         private bool running;
-
-        private readonly static SemaphoreSlim slim = new(1);
+        private Server config;
 
         /// <summary>
         /// 进程ID
@@ -54,7 +55,22 @@ namespace ServerAllInOne.Controls
         /// <summary>
         /// 服务配置
         /// </summary>
-        public Server ServerConfig { get; set; }
+        public Server ServerConfig
+        {
+            get => config;
+            set
+            {
+                if (config != value)
+                {
+                    config = value;
+
+                    if (cmsRichText.Created)
+                    {
+                        InitContextMenuStrip();
+                    }
+                }
+            }
+        }
 
         /// <summary>
         /// 服务执行状态改变
@@ -72,6 +88,7 @@ namespace ServerAllInOne.Controls
         private void ServerConsole_Load(object? sender, EventArgs e)
         {
             WriteTextLine("服务未启动");
+            InitContextMenuStrip();
         }
 
         private void ServerConsole_Disposed(object? sender, EventArgs e)
@@ -130,6 +147,82 @@ namespace ServerAllInOne.Controls
             catch (Exception ex)
             {
                 WriteTextLine($"启动服务异常：{ex.Message}");
+            }
+        }
+
+        private void InitContextMenuStrip()
+        {
+            UIInvoke(() =>
+            {
+                cmsRichText.SuspendLayout();
+                cmsRichText.Items.Clear();
+                cmsRichText.Items.AddRange(new ToolStripItem[]
+                {
+                    tsmiCopy,
+                    tsmiSeparator,
+                    tsmiReturnTop,
+                    tsmiReturnBottom,
+                    tsmiClear
+                });
+
+                AppendQuickMenu();
+                cmsRichText.ResumeLayout(false);
+            });
+        }
+
+        private ToolStripItem CreateMenuItem(ContextMenu item)
+        {
+            if (item.Name == "-")
+            {
+                return new ToolStripSeparator();
+            }
+            var menu = new ToolStripMenuItem(item.Name)
+            {
+                Tag = item
+            };
+            var command = item.Command;
+            if (!string.IsNullOrEmpty(item.Command))
+            {
+                menu.Click += (s, e) =>
+                {
+                    WriteCommand(command);
+                };
+            }
+            return menu;
+        }
+
+        private void AppendQuickMenu()
+        {
+            var contextMenu = ServerConfig.ContextMenu ?? Array.Empty<ContextMenu>();
+            if (contextMenu.Length > 0)
+            {
+                cmsRichText.Items.Add(tsmiSeparator1);
+
+                foreach (var item in contextMenu)
+                {
+                    var menu = CreateMenuItem(item);
+                    if (menu is ToolStripMenuItem toolStripMenuItem)
+                    {
+                        AppendQuickMenu(toolStripMenuItem, item.Items);
+                    }
+                    cmsRichText.Items.Add(menu);
+                }
+            }
+        }
+
+        private void AppendQuickMenu(ToolStripMenuItem parent, ContextMenu[] items)
+        {
+            if (items == null || items.Length == 0)
+                return;
+
+            foreach (var item in items)
+            {
+                var menu = CreateMenuItem(item);
+                if (menu is ToolStripMenuItem toolStripMenuItem)
+                {
+                    AppendQuickMenu(toolStripMenuItem, item.Items);
+                }
+                parent.DropDownItems.Add(menu);
             }
         }
 
@@ -370,19 +463,24 @@ namespace ServerAllInOne.Controls
                             return;
                     }
 
-                    if (ServerConfig?.CanInput ?? false)
-                    {
-                        WriteTextLine(input);
-                        if (process != null)
-                        {
-                            process.StandardInput.WriteLine(input);
-                            process.StandardInput.Flush();
-                        }
-                    }
+                    WriteCommand(input);
                 }
                 finally
                 {
                     txtInput.Clear();
+                }
+            }
+        }
+
+        private void WriteCommand(string command)
+        {
+            if (ServerConfig?.CanInput ?? false)
+            {
+                WriteTextLine(command);
+                if (process != null)
+                {
+                    process.StandardInput.WriteLine(command);
+                    process.StandardInput.Flush();
                 }
             }
         }

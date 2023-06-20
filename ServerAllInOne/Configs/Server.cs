@@ -38,5 +38,28 @@ namespace ServerAllInOne.Configs
         /// </summary>
         public int Sort { get; set; }
 
+        /// <summary>
+        /// 快速菜单
+        /// </summary>
+        public ContextMenu[] ContextMenu { get; set; }
+
+    }
+
+    public class ContextMenu
+    {
+        /// <summary>
+        /// 菜单名称
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// 菜单命令
+        /// </summary>
+        public string Command { get; set; }
+
+        /// <summary>
+        /// 子菜单
+        /// </summary>
+        public ContextMenu[] Items { get; set; }
     }
 }

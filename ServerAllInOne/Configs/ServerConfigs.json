@@ -2,27 +2,29 @@
   "Servers": [
     {
       "Name": "WS",
-      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerCore.exe",
+      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\LKFrameworkCloud\\LKFrameworkCloud\\LKWorksCloud_WebSocket\\Evget.WebSocketServerCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerCore.exe",
       "Arguments": "",
+      "CanInput": true,
       "Sort": 0
     },
     {
       "Name": "WSA",
-      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerAgentCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerAgentCore.exe",
+      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\LKFrameworkCloud\\LKFrameworkCloud\\LKWorksCloud_WebSocket\\Evget.WebSocketServerAgentCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerAgentCore.exe",
       "Arguments": "",
+      "CanInput": true,
       "Sort": 1
     },
     {
       "Name": "WSR",
-      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\Evget.WebSocketServerCore\\Evget.WebSocketServerDynamicCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerDynamicCore.exe",
+      "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\LKFrameworkCloud\\LKFrameworkCloud\\LKWorksCloud_WebSocket\\Evget.WebSocketServerDynamicCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerDynamicCore.exe",
       "Arguments": "",
+      "CanInput": true,
       "Sort": 2
     },
     {
       "Name": "WebApi服务端",
       "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\LKFrameworkCloud\\LKFrameworkCloud\\LKWorksCloud_Core\\Evget.WebServerAPICore\\bin\\Debug\\net6.0\\Evget.LKWordsCloudService.exe",
       "Arguments": "",
-      "CanInput": true,
       "Sort": 3
     },
     {
@@ -30,7 +32,47 @@
       "ExePath": "F:\\Other\\Projects\\ServerAllInOne\\SocketClientAgent\\bin\\Debug\\net6.0\\SocketClientAgent.exe",
       "Arguments": "127.0.0.1 5680",
       "CanInput": true,
-      "Sort": 4
+      "Sort": 4,
+      "ContextMenu": [
+        {
+          "Name": "设备上线",
+          "Items": [
+            {
+              "Name": "Printer01",
+              "Command": ":online Printer01"
+            },
+            {
+              "Name": "Printer02",
+              "Command": ":online Printer02"
+            },
+            {
+              "Name": "Printer03",
+              "Command": ":online Printer03"
+            }
+          ]
+        },
+        {
+          "Name": "设备下线",
+          "Items": [
+            {
+              "Name": "Printer01",
+              "Command": ":offline Printer01"
+            },
+            {
+              "Name": "Printer02",
+              "Command": ":offline Printer02"
+            },
+            {
+              "Name": "Printer03",
+              "Command": ":offline Printer03"
+            }
+          ]
+        },
+        {
+          "Name": "设备状态",
+          "Command": ":list"
+        }
+      ]
     }
   ]
 }

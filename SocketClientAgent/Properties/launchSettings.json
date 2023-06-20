@@ -3,6 +3,10 @@
     "SocketClientAgent": {
       "commandName": "Project",
       "commandLineArgs": "127.0.0.1 5680"
+    },
+    "SocketClientAgent -s": {
+      "commandName": "Project",
+      "commandLineArgs": "121.37.172.130 6605"
     }
   }
 }
