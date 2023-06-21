@@ -30,8 +30,6 @@ namespace SocketClientAgent
         private bool isManualDisconnect = false;
         private ClientStatus status = ClientStatus.Available;
 
-        public string Module { get; set; } = "Equipment";
-
         public string ClientName { get; set; }
 
         /// <summary>
@@ -295,7 +293,7 @@ namespace SocketClientAgent
             await SendAsync(new
             {
                 MsgType = 1,
-                IdentityId = $"{Module}.{ClientName}"
+                IdentityId = ClientName
             }.ToJson());
         }
 
@@ -304,7 +302,7 @@ namespace SocketClientAgent
             await SendAsync(new
             {
                 MsgType = 2,
-                IdentityId = $"{Module}.{ClientName}"
+                IdentityId = ClientName
             }.ToJson());
         }
 
@@ -313,7 +311,7 @@ namespace SocketClientAgent
             await SendAsync(new
             {
                 MsgType = 3,
-                IdentityId = $"{Module}.{ClientName}"
+                IdentityId = ClientName
             }.ToJson());
         }
 
