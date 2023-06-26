@@ -2,7 +2,7 @@
   "profiles": {
     "SocketClientAgent": {
       "commandName": "Project",
-      "commandLineArgs": "127.0.0.1 5680"
+      "commandLineArgs": "127.0.0.1 6605"
     },
     "SocketClientAgent -s": {
       "commandName": "Project",

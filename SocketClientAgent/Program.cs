@@ -33,6 +33,17 @@ namespace SocketClientAgent
                                 {
                                     break;
                                 }
+                                else if (line == ":help")
+                                {
+                                    Console.WriteLine(":exit - exit program.");
+                                    Console.WriteLine(":help - show this help text.");
+                                    Console.WriteLine(":clear - clear console output.");
+                                    Console.WriteLine(":list - list printers.");
+                                    Console.WriteLine(":client [clientName] - set the message sending client.");
+                                    Console.WriteLine(":online [clientName] - online client [clientName].");
+                                    Console.WriteLine(":offline [clientName] - offline client [clientName].");
+                                    Console.WriteLine(":status [clientName] [status] - set [clientName] current status.");
+                                }
                                 else if (line == ":clear")
                                 {
                                     Console.Clear();

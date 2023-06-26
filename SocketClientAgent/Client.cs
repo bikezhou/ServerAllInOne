@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using System.Reflection;
+using Newtonsoft.Json;
 
 namespace SocketClientAgent
 {
@@ -30,6 +31,10 @@ namespace SocketClientAgent
         private bool isManualDisconnect = false;
         private ClientStatus status = ClientStatus.Available;
 
+        private string currentId;
+        private int currentLayer;
+        private int totalLayer;
+
         public string ClientName { get; set; }
 
         /// <summary>
@@ -46,7 +51,14 @@ namespace SocketClientAgent
                     {
                         Task.Run(async () =>
                         {
-                            await Task.Delay(random.Next(1000, 10000));
+                            currentLayer = 0;
+                            totalLayer = random.Next(10, 30);
+                            while (currentLayer < totalLayer)
+                            {
+                                await Task.Delay(random.Next(300, 1000));
+                                PrintLayer();
+                            }
+                            await Task.Delay(random.Next(1000, 3000));
                             SetStatus(ClientStatus.Available);
                         });
                     }
@@ -57,6 +69,7 @@ namespace SocketClientAgent
                 }
             }
         }
+
         /// <summary>
         /// 连接状态
         /// </summary>
@@ -153,6 +166,12 @@ namespace SocketClientAgent
             isConnected = false;
         }
 
+        private void PrintLayer()
+        {
+            currentLayer++;
+            _ = SendStatusAsync();
+        }
+
         public void SetStatus(ClientStatus status)
         {
             Status = status;
@@ -228,6 +247,15 @@ namespace SocketClientAgent
                                                     switch (command.ToLower())
                                                     {
                                                         case "start":
+                                                            currentId = string.Empty;
+                                                            if (jObj.TryGetValue("arguments", out string? arguments) && !string.IsNullOrEmpty(arguments))
+                                                            {
+                                                                var argsObj = JObject.Parse(arguments);
+                                                                if (argsObj.TryGetValue("id", out string? id))
+                                                                {
+                                                                    currentId = id ?? string.Empty;
+                                                                }
+                                                            }
                                                             SetStatus(ClientStatus.Running);
                                                             break;
                                                         case "pause":
@@ -321,12 +349,30 @@ namespace SocketClientAgent
         /// <returns></returns>
         public async Task SendStatusAsync()
         {
-            await SendAsync(new
+            if (Status == ClientStatus.Running)
             {
-                MsgType = 5, // status
-                StatusCode = (int)Status,
-                Message = Status.ToString()
-            }.ToJson());
+                await SendAsync(new
+                {
+                    MsgType = 5, // status
+                    StatusCode = (int)Status,
+                    Message = Status.ToString(),
+                    ExtraData = new
+                    {
+                        Id = currentId,
+                        TotalLayer = totalLayer,
+                        CurrentLayer = currentLayer,
+                    }.ToJson()
+                }.ToJson());
+            }
+            else
+            {
+                await SendAsync(new
+                {
+                    MsgType = 5, // status
+                    StatusCode = (int)Status,
+                    Message = Status.ToString()
+                }.ToJson());
+            }
         }
     }
 }
