@@ -43,6 +43,18 @@ namespace ServerAllInOne.Configs
         /// </summary>
         public ContextMenu[] ContextMenu { get; set; }
 
+        /// <summary>
+        /// 配置文件
+        /// </summary>
+        public Config[] Configs { get; set; }
+
+    }
+
+    public class Config
+    {
+        public string Name { get; set; }
+
+        public string Path { get; set; }
     }
 
     public class ContextMenu

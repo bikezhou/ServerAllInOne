@@ -1,6 +1,7 @@
 using ServerAllInOne.Configs;
 using ServerAllInOne.Controls;
 using ServerAllInOne.Forms;
+using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -278,6 +279,8 @@ namespace ServerAllInOne
                 tsmiStartServer.Enabled = !server.Running;
                 tsmiStopServer.Enabled = server.Running;
                 tsmiRestartServer.Enabled = server.Running;
+
+                tsmiEditConfig.Visible = server.ServerConfig.Configs?.Length > 0;
             }
             else
             {
@@ -316,6 +319,32 @@ namespace ServerAllInOne
                     await server.StopAsync();
                     await server.StartAsync();
                 });
+            }
+        }
+
+        private void tsmiOpenFolder_Click(object sender, EventArgs e)
+        {
+            var tabPage = tabControl.SelectedTab;
+            if (tabPage.Controls[0] is ServerConsole server)
+            {
+                var folder = Path.GetDirectoryName(server.ServerConfig.ExePath);
+                if (!string.IsNullOrEmpty(folder))
+                {
+                    Process.Start("explorer.exe", folder);
+                }
+            }
+        }
+
+        private void tsmiEditConfig_Click(object sender, EventArgs e)
+        {
+            var tabPage = tabControl.SelectedTab;
+            if (tabPage.Controls[0] is ServerConsole server)
+            {
+                var editorForm = new ConfigEditorForm()
+                {
+                    Configs = server.ServerConfig.Configs.Select(x => new KeyValuePair<string, string>(x.Name, Path.GetFullPath(Path.Combine(Path.GetDirectoryName(server.ServerConfig.ExePath) ?? "", x.Path)))).ToArray()
+                };
+                editorForm.Show(this);
             }
         }
 
