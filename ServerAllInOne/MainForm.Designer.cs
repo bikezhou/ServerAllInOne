@@ -156,54 +156,55 @@ namespace ServerAllInOne
             // 
             cmsTabMenu.Items.AddRange(new ToolStripItem[] { tsmiStartServer, tsmiStopServer, tsmiRestartServer, toolStripMenuItem1, tsmiOpenFolder, tsmiEditConfig });
             cmsTabMenu.Name = "contextMenuStrip1";
-            cmsTabMenu.Size = new Size(181, 142);
+            cmsTabMenu.Size = new Size(125, 120);
             cmsTabMenu.Opening += cmsTabMenu_Opening;
             // 
             // tsmiStartServer
             // 
             tsmiStartServer.Name = "tsmiStartServer";
-            tsmiStartServer.Size = new Size(180, 22);
+            tsmiStartServer.Size = new Size(124, 22);
             tsmiStartServer.Text = "启动服务";
             tsmiStartServer.Click += tsmiStartServer_Click;
             // 
             // tsmiStopServer
             // 
             tsmiStopServer.Name = "tsmiStopServer";
-            tsmiStopServer.Size = new Size(180, 22);
+            tsmiStopServer.Size = new Size(124, 22);
             tsmiStopServer.Text = "停止服务";
             tsmiStopServer.Click += tsmiStopServer_Click;
             // 
             // tsmiRestartServer
             // 
             tsmiRestartServer.Name = "tsmiRestartServer";
-            tsmiRestartServer.Size = new Size(180, 22);
+            tsmiRestartServer.Size = new Size(124, 22);
             tsmiRestartServer.Text = "重启服务";
             tsmiRestartServer.Click += tsmiRestartServer_Click;
             // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
-            toolStripMenuItem1.Size = new Size(177, 6);
+            toolStripMenuItem1.Size = new Size(121, 6);
             // 
             // tsmiOpenFolder
             // 
             tsmiOpenFolder.Name = "tsmiOpenFolder";
-            tsmiOpenFolder.Size = new Size(180, 22);
+            tsmiOpenFolder.Size = new Size(124, 22);
             tsmiOpenFolder.Text = "打开目录";
             tsmiOpenFolder.Click += tsmiOpenFolder_Click;
             // 
             // tsmiEditConfig
             // 
             tsmiEditConfig.Name = "tsmiEditConfig";
-            tsmiEditConfig.Size = new Size(180, 22);
+            tsmiEditConfig.Size = new Size(124, 22);
             tsmiEditConfig.Text = "配置编辑";
             tsmiEditConfig.Click += tsmiEditConfig_Click;
             // 
             // notifyIcon
             // 
+            notifyIcon.BalloonTipIcon = ToolTipIcon.Info;
             notifyIcon.ContextMenuStrip = cmsMain;
             notifyIcon.Icon = (Icon)resources.GetObject("notifyIcon.Icon");
-            notifyIcon.Text = "4543634646";
+            notifyIcon.Text = "--";
             notifyIcon.Visible = true;
             notifyIcon.MouseDoubleClick += notifyIcon_MouseDoubleClick;
             // 

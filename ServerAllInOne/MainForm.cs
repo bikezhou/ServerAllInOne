@@ -9,6 +9,7 @@ namespace ServerAllInOne
 {
     public partial class MainForm : Form
     {
+        private readonly AppConfig appConfig;
         private readonly ServerConfigs configs;
 
         private int runningServerCount = 0;
@@ -31,6 +32,9 @@ namespace ServerAllInOne
             Load += Form1_Load;
 
             configs = ServerConfigs.Default;
+            appConfig = AppConfig.Default;
+
+            Text = appConfig.Name;
         }
 
         private void Form1_Load(object? sender, EventArgs e)
@@ -69,8 +73,8 @@ namespace ServerAllInOne
                     }
                     else
                     {
-                        Hide();
                         notifyIcon.ShowBalloonTip(20, "提示信息", "程序已最小化到桌面右下角", ToolTipIcon.Info);
+                        Hide();
                         e.Cancel = true;
                     }
                 }
@@ -236,7 +240,7 @@ namespace ServerAllInOne
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(iconPath);
 
             notifyIcon.Icon = stream != null ? new Icon(stream) : null;
-            notifyIcon.Text = runningServerCount > 0 ? $"正在运行：{runningServerCount}/{serverCount}" : "服务未运行";
+            notifyIcon.Text = runningServerCount > 0 ? $"{appConfig.Name} - 正在运行：{runningServerCount}/{serverCount}" : $"{appConfig.Name} - 服务未运行";
         }
 
         private void ServerTabForeach(Action<TabPage> action)

@@ -10,20 +10,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Assets\Icons\server_windows.ico" />
-    <None Remove="Assets\Icons\server_windows_stop.ico" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Content Include="Assets\Icons\server_windows.ico">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Assets\Icons\server_windows.ico" />
     <Content Include="Assets\Icons\server_windows_stop.ico">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
@@ -33,6 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Configs\AppConfig.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Configs\ServerConfigs.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
