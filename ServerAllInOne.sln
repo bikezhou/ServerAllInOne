@@ -3,18 +3,24 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocketClient", "SocketClient\SocketClient.csproj", "{315AFCA7-9729-46CE-9C87-4C4019EF4B7F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocketClient", "v1.0\SocketClient\SocketClient.csproj", "{315AFCA7-9729-46CE-9C87-4C4019EF4B7F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocketClientAgent", "SocketClientAgent\SocketClientAgent.csproj", "{C3241EBF-4950-4C07-9BAF-2B10A003C2FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SocketClientAgent", "v1.0\SocketClientAgent\SocketClientAgent.csproj", "{C3241EBF-4950-4C07-9BAF-2B10A003C2FA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerAllInOne", "ServerAllInOne\ServerAllInOne.csproj", "{3E87C2C8-783C-4CF2-815F-4DB5FC3DFCB5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerAllInOne", "v1.0\ServerAllInOne\ServerAllInOne.csproj", "{3E87C2C8-783C-4CF2-815F-4DB5FC3DFCB5}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决方案项", "{EECBDA7C-23B2-4D44-B064-68230451A3FE}"
 	ProjectSection(SolutionItems) = preProject
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlSugar.CodeBuilder", "SqlSugar.CodeBuilder\SqlSugar.CodeBuilder.csproj", "{4B64FEA5-19C5-479B-BCB3-02CB94996B4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlSugar.CodeBuilder", "v1.0\SqlSugar.CodeBuilder\SqlSugar.CodeBuilder.csproj", "{4B64FEA5-19C5-479B-BCB3-02CB94996B4B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "v1.0", "v1.0", "{C7F5FCDF-BB2E-44BC-9AA0-EC4221E1A5CB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceAllInOne.Core", "ServiceAllInOne.Core\ServiceAllInOne.Core.csproj", "{89A19F08-E2AE-4FED-AA9C-CB313AD0DB61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceAllInOne", "ServiceAllInOne\ServiceAllInOne.csproj", "{AAAAC796-234D-4EBC-8FF9-0DF465399F4C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,9 +44,23 @@ Global
 		{4B64FEA5-19C5-479B-BCB3-02CB94996B4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4B64FEA5-19C5-479B-BCB3-02CB94996B4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4B64FEA5-19C5-479B-BCB3-02CB94996B4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89A19F08-E2AE-4FED-AA9C-CB313AD0DB61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89A19F08-E2AE-4FED-AA9C-CB313AD0DB61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89A19F08-E2AE-4FED-AA9C-CB313AD0DB61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89A19F08-E2AE-4FED-AA9C-CB313AD0DB61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAAAC796-234D-4EBC-8FF9-0DF465399F4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAAAC796-234D-4EBC-8FF9-0DF465399F4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAAAC796-234D-4EBC-8FF9-0DF465399F4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAAAC796-234D-4EBC-8FF9-0DF465399F4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{315AFCA7-9729-46CE-9C87-4C4019EF4B7F} = {C7F5FCDF-BB2E-44BC-9AA0-EC4221E1A5CB}
+		{C3241EBF-4950-4C07-9BAF-2B10A003C2FA} = {C7F5FCDF-BB2E-44BC-9AA0-EC4221E1A5CB}
+		{3E87C2C8-783C-4CF2-815F-4DB5FC3DFCB5} = {C7F5FCDF-BB2E-44BC-9AA0-EC4221E1A5CB}
+		{4B64FEA5-19C5-479B-BCB3-02CB94996B4B} = {C7F5FCDF-BB2E-44BC-9AA0-EC4221E1A5CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {6512B412-46DF-4393-844E-45FD04CC2524}

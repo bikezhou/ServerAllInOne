@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="ServiceAllInOne.Views.ServicePanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:pu="https://opensource.panuon.com/wpf-ui"
+             xmlns:local="clr-namespace:ServiceAllInOne.Views"
+             xmlns:vm="clr-namespace:ServiceAllInOne.ViewModels"
+             mc:Ignorable="d" 
+             d:DataContext="{d:DesignInstance Type={x:Type vm:ServicePanelViewModel}}"
+             d:DesignHeight="80" d:DesignWidth="240">
+    <Grid>
+        <Border CornerRadius="5"
+                Background="White"
+                Padding="8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid>
+                    <TextBlock Text="{Binding Name}" d:Text="Visual Studio Code"
+                               VerticalAlignment="Center"
+                               FontSize="16"
+                               TextTrimming="CharacterEllipsis" />
+                </Grid>
+                <StackPanel Orientation="Horizontal" Grid.Column="1" Margin="5,0,0,0">
+                    <Button Width="30" Height="30" />
+                    <Button Width="30" Height="30" Margin="5,0,0,0" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
