@@ -33,6 +33,7 @@ namespace ServerAllInOne.Forms
 
             Server = new Server
             {
+                UUID = Guid.NewGuid().ToString(),
                 Name = txtName.Text,
                 ExePath = txtExePath.Text,
                 Arguments = txtArguments.Text,

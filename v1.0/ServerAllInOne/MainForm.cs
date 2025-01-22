@@ -97,6 +97,7 @@ namespace ServerAllInOne
 
             var listItem = new ServerListItem
             {
+                UUID = server.UUID,
                 Name = server.Name,
                 Running = serverConsole.Running,
                 ProcessId = serverConsole.ProcessId,
@@ -161,7 +162,7 @@ namespace ServerAllInOne
 
             foreach (var server in configs.Servers)
             {
-                var tabPage = tabPages.Find(t => t.Tag == server);
+                var tabPage = tabPages.Find(t => t.Tag is ServerListItem item && item.UUID == server.UUID);
                 tabControl.TabPages.Add(tabPage);
             }
 

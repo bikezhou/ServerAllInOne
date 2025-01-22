@@ -9,6 +9,11 @@ namespace ServerAllInOne.Configs
     public class Server
     {
         /// <summary>
+        /// GUID
+        /// </summary>
+        public string UUID { get; set; }
+
+        /// <summary>
         /// 名称
         /// </summary>
         public string Name { get; set; }

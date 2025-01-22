@@ -1,6 +1,7 @@
 {
   "Servers": [
     {
+      "UUID": "2621D409-CEBF-4DBC-A3BD-88B18AB6D721",
       "Name": "WS",
       "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\LKFrameworkCloud\\LKFrameworkCloud\\LKWorksCloud_WebSocket\\Evget.WebSocketServerCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerCore.exe",
       "Arguments": "",
@@ -8,6 +9,7 @@
       "Sort": 0
     },
     {
+      "UUID": "5D7D17B3-FA23-4B75-B3D6-D4FDADF036FD",
       "Name": "WSA",
       "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\LKFrameworkCloud\\LKFrameworkCloud\\LKWorksCloud_WebSocket\\Evget.WebSocketServerAgentCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerAgentCore.exe",
       "Arguments": "",
@@ -15,6 +17,7 @@
       "Sort": 1
     },
     {
+      "UUID": "2621D409-CEBF-4DBC-A3BD-88B18AB6D721",
       "Name": "WSR",
       "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\LKFrameworkCloud\\LKFrameworkCloud\\LKWorksCloud_WebSocket\\Evget.WebSocketServerDynamicCore\\bin\\Debug\\net6.0\\Evget.WebSocketServerDynamicCore.exe",
       "Arguments": "",
@@ -22,6 +25,7 @@
       "Sort": 2
     },
     {
+      "UUID": "C15AF012-D4AC-4525-BAA2-DCC39583F685",
       "Name": "WebApi服务端",
       "ExePath": "F:\\LKWorks\\LKWorksCloud\\源代码\\LKFrameworkCloud\\LKFrameworkCloud\\LKWorksCloud_Core\\Evget.WebServerAPICore\\bin\\Debug\\net6.0\\Evget.LKWordsCloudService.exe",
       "Arguments": "",
@@ -50,6 +54,7 @@
       ]
     },
     {
+      "UUID": "F5D36F21-872F-4A9C-B87F-277199EC123C",
       "Name": "Socket设备客户端",
       "ExePath": "F:\\Other\\Projects\\ServerAllInOne\\SocketClientAgent\\bin\\Debug\\net6.0\\SocketClientAgent.exe",
       "Arguments": "127.0.0.1 6605",
