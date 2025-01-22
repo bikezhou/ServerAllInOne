@@ -37,6 +37,7 @@ namespace ServerAllInOne.Forms
                 Name = txtName.Text,
                 ExePath = txtExePath.Text,
                 Arguments = txtArguments.Text,
+                WorkingDirectory = txtWorkingDirectory.Text,
                 Sort = (int)nudSort.Value,
                 CanInput = chkCanInput.Checked
             };

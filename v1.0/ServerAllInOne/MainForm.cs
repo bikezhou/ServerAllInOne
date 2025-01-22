@@ -332,7 +332,7 @@ namespace ServerAllInOne
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
             {
-                var folder = Path.GetDirectoryName(server.ServerConfig.ExePath);
+                var folder = server.ServerConfig.WorkingDirectory ?? Path.GetDirectoryName(server.ServerConfig.ExePath);
                 if (!string.IsNullOrEmpty(folder))
                 {
                     Process.Start("explorer.exe", folder);

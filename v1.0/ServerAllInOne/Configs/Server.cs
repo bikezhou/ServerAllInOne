@@ -34,6 +34,11 @@ namespace ServerAllInOne.Configs
         public string Arguments { get; set; }
 
         /// <summary>
+        /// 工作目录
+        /// </summary>
+        public string WorkingDirectory { get; set; }
+
+        /// <summary>
         /// 支持输入
         /// </summary>
         public bool CanInput { get; set; }

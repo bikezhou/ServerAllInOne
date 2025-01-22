@@ -118,7 +118,7 @@ namespace ServerAllInOne.Controls
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     CreateNoWindow = true,
-                    WorkingDirectory = Path.GetDirectoryName(ServerConfig.ExePath)
+                    WorkingDirectory = ServerConfig.WorkingDirectory ?? Path.GetDirectoryName(ServerConfig.ExePath)
                 });
 
                 if (process != null)

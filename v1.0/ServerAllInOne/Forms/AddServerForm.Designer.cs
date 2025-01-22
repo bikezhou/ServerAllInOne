@@ -39,6 +39,8 @@
             label4 = new Label();
             nudSort = new NumericUpDown();
             chkCanInput = new CheckBox();
+            txtWorkingDirectory = new TextBox();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)nudSort).BeginInit();
             SuspendLayout();
             // 
@@ -116,7 +118,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(12, 113);
+            label4.Location = new Point(18, 145);
             label4.Name = "label4";
             label4.Size = new Size(68, 17);
             label4.TabIndex = 9;
@@ -125,7 +127,7 @@
             // nudSort
             // 
             nudSort.BorderStyle = BorderStyle.FixedSingle;
-            nudSort.Location = new Point(86, 110);
+            nudSort.Location = new Point(86, 140);
             nudSort.Name = "nudSort";
             nudSort.Size = new Size(69, 23);
             nudSort.TabIndex = 10;
@@ -133,12 +135,28 @@
             // chkCanInput
             // 
             chkCanInput.AutoSize = true;
-            chkCanInput.Location = new Point(171, 111);
+            chkCanInput.Location = new Point(177, 143);
             chkCanInput.Name = "chkCanInput";
             chkCanInput.Size = new Size(75, 21);
             chkCanInput.TabIndex = 11;
             chkCanInput.Text = "允许输入";
             chkCanInput.UseVisualStyleBackColor = true;
+            // 
+            // txtWorkingDirectory
+            // 
+            txtWorkingDirectory.Location = new Point(86, 110);
+            txtWorkingDirectory.Name = "txtWorkingDirectory";
+            txtWorkingDirectory.Size = new Size(278, 23);
+            txtWorkingDirectory.TabIndex = 4;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(12, 113);
+            label5.Name = "label5";
+            label5.Size = new Size(68, 17);
+            label5.TabIndex = 5;
+            label5.Text = "工作目录：";
             // 
             // AddServerForm
             // 
@@ -151,7 +169,9 @@
             Controls.Add(label4);
             Controls.Add(btnSelect);
             Controls.Add(btnOk);
+            Controls.Add(label5);
             Controls.Add(label3);
+            Controls.Add(txtWorkingDirectory);
             Controls.Add(txtArguments);
             Controls.Add(label2);
             Controls.Add(txtExePath);
@@ -180,5 +200,7 @@
         private Label label4;
         private NumericUpDown nudSort;
         private CheckBox chkCanInput;
+        private TextBox txtWorkingDirectory;
+        private Label label5;
     }
 }
