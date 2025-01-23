@@ -82,7 +82,7 @@ namespace ServerAllInOne.Forms
 
         private void SaveConfig()
         {
-            File.WriteAllText(_openConfigPath, richEditor.Text, Encoding.UTF8);
+            File.WriteAllText(_openConfigPath, richEditor.Text, new UTF8Encoding(false)/* 不带BOM的UTF8编码 */);
             _originConfig = richEditor.Text;
         }
 

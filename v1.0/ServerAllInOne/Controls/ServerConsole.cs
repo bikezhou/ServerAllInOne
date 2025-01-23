@@ -283,33 +283,46 @@ namespace ServerAllInOne.Controls
 
                 WriteTextLine("服务停止中...");
 
-                if (AttachConsole((uint)process.Id))
+                try
                 {
-                    // 设置自己的ctrl+c处理，防止自己被终止
-                    SetConsoleCtrlHandler(handler, true);
-                    try
+                    if (AttachConsole((uint)process.Id))
                     {
-                        // 发送ctrl+c（注意：这是向所有共享该console的进程发送）
-                        if (!GenerateConsoleCtrlEvent((uint)CtrlTypes.CTRL_C_EVENT, 0))
-                            return;
+                        // 设置自己的ctrl+c处理，防止自己被终止
+                        SetConsoleCtrlHandler(handler, true);
+                        try
+                        {
+                            // 发送ctrl+c（注意：这是向所有共享该console的进程发送）
+                            if (!GenerateConsoleCtrlEvent((uint)CtrlTypes.CTRL_C_EVENT, 0))
+                                return;
 
-                        process.CancelErrorRead();
-                        process.CancelOutputRead();
+                            process.CancelErrorRead();
+                            process.CancelOutputRead();
 
-                        // 等待500ms
-                        process.WaitForExit(500);
-                    }
-                    finally
-                    {
-                        // 重置此参数
-                        SetConsoleCtrlHandler(handler, false);
-                        FreeConsole();
+                            // 等待3s
+                            process.WaitForExit(3000);
+                        }
+                        finally
+                        {
+                            FreeConsole();
+                            // 重置此参数
+                            SetConsoleCtrlHandler(handler, false);
+                        }
                     }
                 }
-
-                if (running)
+                finally
                 {
-                    WriteTextLine("服务停止失败");
+                    if (running)
+                    {
+                        WriteTextLine("服务停止失败，执行Kill");
+                        // 执行kill
+                        process.Kill();
+                        process.WaitForExit(1000);
+
+                        if (running)
+                        {
+                            WriteTextLine("服务停止失败");
+                        }
+                    }
                 }
             }
         }
