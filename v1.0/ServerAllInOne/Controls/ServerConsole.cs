@@ -123,20 +123,29 @@ namespace ServerAllInOne.Controls
 
             try
             {
-                if (!File.Exists(ServerConfig.ExePath))
+                // 获取完整路径
+                string exePath = Path.GetFullPath(Path.Combine(Application.ExecutablePath, ServerConfig.ExePath));
+
+                if (!File.Exists(exePath))
                 {
-                    WriteTextLine($"服务文件不存在：{ServerConfig.ExePath}");
+                    WriteTextLine($"服务文件不存在：{exePath}");
                     return;
                 }
 
-                process = Process.Start(new ProcessStartInfo(ServerConfig.ExePath, ServerConfig.Arguments)
+                string workingDirectory = Path.GetDirectoryName(exePath) ?? "";
+                if (!string.IsNullOrEmpty(ServerConfig.WorkingDirectory))
+                {
+                    workingDirectory = Path.GetFullPath(Path.Combine(Application.ExecutablePath, ServerConfig.WorkingDirectory));
+                }
+
+                process = Process.Start(new ProcessStartInfo(exePath, ServerConfig.Arguments)
                 {
                     UseShellExecute = false,
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
                     CreateNoWindow = true,
-                    WorkingDirectory = ServerConfig.WorkingDirectory ?? Path.GetDirectoryName(ServerConfig.ExePath)
+                    WorkingDirectory = workingDirectory
                 });
 
                 if (process != null)

@@ -357,9 +357,16 @@ namespace ServerAllInOne
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
             {
+                string exePath = Path.GetFullPath(Path.Combine(Application.ExecutablePath, server.ServerConfig.ExePath));
+                string workingDirectory = Path.GetDirectoryName(exePath) ?? "";
+                if (!string.IsNullOrEmpty(server.ServerConfig.WorkingDirectory))
+                {
+                    workingDirectory = Path.GetFullPath(Path.Combine(Application.ExecutablePath, server.ServerConfig.WorkingDirectory));
+                }
+
                 var editorForm = new ConfigEditorForm()
                 {
-                    Configs = server.ServerConfig.Configs.Select(x => new KeyValuePair<string, string>(x.Name, Path.GetFullPath(Path.Combine(Path.GetDirectoryName(server.ServerConfig.ExePath) ?? "", x.Path)))).ToArray()
+                    Configs = server.ServerConfig.Configs.Select(x => new KeyValuePair<string, string>(x.Name, Path.GetFullPath(Path.Combine(workingDirectory, x.Path)))).ToArray()
                 };
                 editorForm.Show(this);
             }
