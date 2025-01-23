@@ -50,37 +50,49 @@ namespace ServerAllInOne
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (ConfirmExit)
+            try
             {
-                if (runningServerCount > 0)
+                if (ConfirmExit)
                 {
-                    if (MessageBox.Show("服务运行中，是否停止所有运行中的服务并退出程序？", "退出程序", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                    if (runningServerCount > 0)
                     {
-                        e.Cancel = true;
-                        return;
+                        if (MessageBox.Show("服务运行中，是否停止所有运行中的服务并退出程序？", "退出程序", MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.No)
+                        {
+                            e.Cancel = true;
+                            return;
+                        }
                     }
-                }
-                StopAllServer();
-            }
-            else
-            {
-                var exitForm = new ExitConfirmForm();
-                if (exitForm.ShowDialog(this) == DialogResult.OK)
-                {
-                    if (exitForm.SimplyExit)
-                    {
-                        StopAllServer();
-                    }
-                    else
-                    {
-                        notifyIcon.ShowBalloonTip(20, "提示信息", "程序已最小化到桌面右下角", ToolTipIcon.Info);
-                        Hide();
-                        e.Cancel = true;
-                    }
+                    StopAllServer();
                 }
                 else
                 {
-                    e.Cancel = true;
+                    var exitForm = new ExitConfirmForm();
+                    if (exitForm.ShowDialog(this) == DialogResult.OK)
+                    {
+                        if (exitForm.SimplyExit)
+                        {
+                            StopAllServer();
+                        }
+                        else
+                        {
+                            Hide();
+                            e.Cancel = true;
+                            notifyIcon.ShowBalloonTip(2000, "提示信息", "程序已最小化到桌面右下角", ToolTipIcon.Info);
+
+                        }
+                    }
+                    else
+                    {
+                        e.Cancel = true;
+                    }
+                }
+            }
+            finally
+            {
+                if (!e.Cancel)
+                {
+                    notifyIcon.Visible = false;
+                    notifyIcon.Dispose();
                 }
             }
         }
