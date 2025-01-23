@@ -38,6 +38,7 @@ namespace ServerAllInOne.Controls
         private Process? process;
         private bool running;
         private Server config;
+        private List<string> writeCache = new List<string>();
 
         /// <summary>
         /// 进程ID
@@ -87,6 +88,23 @@ namespace ServerAllInOne.Controls
 
         private void ServerConsole_Load(object? sender, EventArgs e)
         {
+            // 日志缓存输出
+            Task.Run(async () =>
+            {
+                while (true)
+                {
+                    await Task.Delay(100);
+                    if (writeCache.Count == 0)
+                        continue;
+
+                    lock (writeCache)
+                    {
+                        WriteText(string.Join(Environment.NewLine, writeCache) + Environment.NewLine);
+                        writeCache.Clear();
+                    }
+                }
+            });
+
             WriteTextLine("服务未启动");
             InitContextMenuStrip();
         }
@@ -252,6 +270,8 @@ namespace ServerAllInOne.Controls
                     return c == CtrlTypes.CTRL_C_EVENT;
                 });
 
+                WriteTextLine("服务停止中...");
+
                 if (AttachConsole((uint)process.Id))
                 {
                     // 设置自己的ctrl+c处理，防止自己被终止
@@ -265,8 +285,8 @@ namespace ServerAllInOne.Controls
                         process.CancelErrorRead();
                         process.CancelOutputRead();
 
-                        // 等待100ms
-                        process.WaitForExit(100);
+                        // 等待500ms
+                        process.WaitForExit(500);
                     }
                     finally
                     {
@@ -330,7 +350,11 @@ namespace ServerAllInOne.Controls
 
         private void WriteTextLine(string text)
         {
-            WriteText(text + Environment.NewLine);
+            // 写入缓存
+            lock (writeCache)
+            {
+                writeCache.Add(text);
+            }
         }
 
         private void WriteText(string? text)
