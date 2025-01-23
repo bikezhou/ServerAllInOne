@@ -357,11 +357,12 @@ namespace ServerAllInOne
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
             {
-                string exePath = Path.GetFullPath(Path.Combine(Application.ExecutablePath, server.ServerConfig.ExePath));
+                string currentDirectory = Path.GetDirectoryName(Application.ExecutablePath) ?? "";
+                string exePath = Path.GetFullPath(Path.Combine(currentDirectory, server.ServerConfig.ExePath));
                 string workingDirectory = Path.GetDirectoryName(exePath) ?? "";
                 if (!string.IsNullOrEmpty(server.ServerConfig.WorkingDirectory))
                 {
-                    workingDirectory = Path.GetFullPath(Path.Combine(Application.ExecutablePath, server.ServerConfig.WorkingDirectory));
+                    workingDirectory = Path.GetFullPath(Path.Combine(currentDirectory, server.ServerConfig.WorkingDirectory));
                 }
 
                 var editorForm = new ConfigEditorForm()

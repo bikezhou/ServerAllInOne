@@ -1,4 +1,5 @@
-﻿using ServerAllInOne.Configs;
+﻿using Microsoft.VisualBasic.ApplicationServices;
+using ServerAllInOne.Configs;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -124,7 +125,8 @@ namespace ServerAllInOne.Controls
             try
             {
                 // 获取完整路径
-                string exePath = Path.GetFullPath(Path.Combine(Application.ExecutablePath, ServerConfig.ExePath));
+                string currentDirectory = Path.GetDirectoryName(Application.ExecutablePath) ?? "";
+                string exePath = Path.GetFullPath(Path.Combine(currentDirectory, ServerConfig.ExePath));
 
                 if (!File.Exists(exePath))
                 {
@@ -135,7 +137,7 @@ namespace ServerAllInOne.Controls
                 string workingDirectory = Path.GetDirectoryName(exePath) ?? "";
                 if (!string.IsNullOrEmpty(ServerConfig.WorkingDirectory))
                 {
-                    workingDirectory = Path.GetFullPath(Path.Combine(Application.ExecutablePath, ServerConfig.WorkingDirectory));
+                    workingDirectory = Path.GetFullPath(Path.Combine(currentDirectory, ServerConfig.WorkingDirectory));
                 }
 
                 process = Process.Start(new ProcessStartInfo(exePath, ServerConfig.Arguments)
