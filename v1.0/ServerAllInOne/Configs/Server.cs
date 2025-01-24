@@ -44,6 +44,11 @@ namespace ServerAllInOne.Configs
         public bool CanInput { get; set; }
 
         /// <summary>
+        /// 控制台代码页，默认936（GBK）
+        /// </summary>
+        public int? CodePage { get; set; } = 936;
+
+        /// <summary>
         /// 排序
         /// </summary>
         public int Sort { get; set; }

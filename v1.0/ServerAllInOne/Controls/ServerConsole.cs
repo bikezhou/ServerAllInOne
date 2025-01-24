@@ -2,6 +2,7 @@
 using ServerAllInOne.Configs;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Windows.Forms;
 
 namespace ServerAllInOne.Controls
@@ -140,7 +141,7 @@ namespace ServerAllInOne.Controls
                     workingDirectory = Path.GetFullPath(Path.Combine(currentDirectory, ServerConfig.WorkingDirectory));
                 }
 
-                process = Process.Start(new ProcessStartInfo(exePath, ServerConfig.Arguments)
+                var startInfo = new ProcessStartInfo(exePath, ServerConfig.Arguments)
                 {
                     UseShellExecute = false,
                     RedirectStandardInput = true,
@@ -148,7 +149,18 @@ namespace ServerAllInOne.Controls
                     RedirectStandardError = true,
                     CreateNoWindow = true,
                     WorkingDirectory = workingDirectory
-                });
+                };
+
+                switch (ServerConfig.CodePage)
+                {
+                    case 65001: // utf-8
+                        startInfo.StandardOutputEncoding = Encoding.UTF8;
+                        startInfo.StandardErrorEncoding = Encoding.UTF8;
+                        startInfo.StandardInputEncoding = Encoding.UTF8;
+                        break;
+                }
+
+                process = Process.Start(startInfo);
 
                 if (process != null)
                 {
@@ -165,6 +177,14 @@ namespace ServerAllInOne.Controls
                     process.BeginErrorReadLine();
 
                     running = true;
+
+                    switch (ServerConfig.CodePage)
+                    {
+                        case 65001: // utf-8
+                            process.StandardInput.WriteLine("chcp " + ServerConfig.CodePage);
+                            process.StandardInput.Flush();
+                            break;
+                    }
 
                     WriteTextLine($"服务已启动[进程ID：{process.Id}]");
                     UIInvoke(() =>
