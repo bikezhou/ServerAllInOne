@@ -8,7 +8,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 		README.md = README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAllInOne", "ServerAllInOne\ServerAllInOne.csproj", "{E53410A5-23FA-4165-9D45-8B8E9F559A42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAllInOne.Core", "ServerAllInOne.Core\ServerAllInOne.Core.csproj", "{3E5485E6-D508-4394-AB70-D6D7A2449816}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E53410A5-23FA-4165-9D45-8B8E9F559A42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E53410A5-23FA-4165-9D45-8B8E9F559A42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E53410A5-23FA-4165-9D45-8B8E9F559A42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E53410A5-23FA-4165-9D45-8B8E9F559A42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E5485E6-D508-4394-AB70-D6D7A2449816}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E5485E6-D508-4394-AB70-D6D7A2449816}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E5485E6-D508-4394-AB70-D6D7A2449816}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E5485E6-D508-4394-AB70-D6D7A2449816}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
