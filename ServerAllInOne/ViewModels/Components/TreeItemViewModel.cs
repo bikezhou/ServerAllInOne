@@ -10,31 +10,31 @@ namespace ServerAllInOne.ViewModels.Components
 {
     public class TreeItemViewModel : PropertyChangedBase
     {
-        private string? _title;
-        private bool _isExpanded;
-        private ObservableCollection<TreeItemViewModel> _children;
+        private string? title;
+        private bool isExpanded;
+        private ObservableCollection<TreeItemViewModel> children;
 
         public TreeItemViewModel()
         {
-            _children = [];
+            children = [];
         }
 
         public string? Title
         {
-            get => _title;
-            set => Set(ref _title, value);
+            get => title;
+            set => Set(ref title, value);
         }
 
         public bool IsExpanded
         {
-            get => _isExpanded;
-            set => Set(ref _isExpanded, value);
+            get => isExpanded;
+            set => Set(ref isExpanded, value);
         }
 
         public ObservableCollection<TreeItemViewModel> Children
         {
-            get => _children;
-            set => Set(ref _children, value ?? []);
+            get => children;
+            set => Set(ref children, value ?? []);
         }
 
 

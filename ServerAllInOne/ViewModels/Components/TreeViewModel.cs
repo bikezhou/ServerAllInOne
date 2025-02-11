@@ -10,24 +10,24 @@ namespace ServerAllInOne.ViewModels.Components
 {
     public class TreeViewModel : PropertyChangedBase
     {
-        private string? _title;
-        private ObservableCollection<TreeItemViewModel> _children;
+        private string? title;
+        private ObservableCollection<TreeItemViewModel> children;
 
         public TreeViewModel()
         {
-            _children = [];
+            children = [];
         }
 
         public string? Title
         {
-            get => _title;
-            set => Set(ref _title, value);
+            get => title;
+            set => Set(ref title, value);
         }
 
         public ObservableCollection<TreeItemViewModel> Children
         {
-            get => _children;
-            set => Set(ref _children, value ?? []);
+            get => children;
+            set => Set(ref children, value ?? []);
         }
 
     }

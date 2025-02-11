@@ -11,13 +11,13 @@ namespace ServerAllInOne.ViewModels
 {
     public class MainWindowViewModel : PropertyChangedBase
     {
-        private TreeViewModel _serverTree;
+        private TreeViewModel serverTree;
 
         public MainWindowViewModel()
         {
-            _serverTree = new TreeViewModel();
+            serverTree = new TreeViewModel();
 
-            _serverTree.Children = [
+            serverTree.Children = [
                 new TreeItemViewModel()
                 {
                     Title = "Group",
@@ -46,8 +46,8 @@ namespace ServerAllInOne.ViewModels
 
         public TreeViewModel ServerTree
         {
-            get => _serverTree;
-            set => Set(ref _serverTree, value);
+            get => serverTree;
+            set => Set(ref serverTree, value);
         }
 
     }
