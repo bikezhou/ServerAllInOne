@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="ServerAllInOne.Views.Components.ServerTreeView"
+﻿<UserControl x:Class="ServerAllInOne.Views.Components.TreeView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -9,7 +9,7 @@
              mc:Ignorable="d" 
              d:Background="White"
              d:DesignHeight="500" d:DesignWidth="300"
-             d:DataContext="{d:DesignInstance Type=viewModel:ServerTreeViewModel,IsDesignTimeCreatable=True}">
+             d:DataContext="{d:DesignInstance Type=viewModel:TreeViewModel,IsDesignTimeCreatable=True}">
     <Border BorderBrush="LightGray" BorderThickness="1">
         <Grid>
             <Grid.RowDefinitions>

@@ -11,40 +11,40 @@ namespace ServerAllInOne.ViewModels
 {
     public class MainWindowViewModel : PropertyChangedBase
     {
-        private ServerTreeViewModel _serverTree;
+        private TreeViewModel _serverTree;
 
         public MainWindowViewModel()
         {
-            _serverTree = new ServerTreeViewModel();
+            _serverTree = new TreeViewModel();
 
             _serverTree.Children = [
-                new ServerTreeItemViewModel()
+                new TreeItemViewModel()
                 {
                     Title = "Group",
                     IsExpanded = true,
-                    Children = new ObservableCollection<ServerTreeItemViewModel>
+                    Children = new ObservableCollection<TreeItemViewModel>
                     {
-                        new ServerTreeItemViewModel()
+                        new TreeItemViewModel()
                         {
                             Title = "Minio Server"
                         },
-                        new ServerTreeItemViewModel()
+                        new TreeItemViewModel()
                         {
                             Title = "nginx"
                         },
-                        new ServerTreeItemViewModel()
+                        new TreeItemViewModel()
                         {
                             Title = "网盘API"
                         }
                     }
                 },
-                new ServerTreeItemViewModel(){
+                new TreeItemViewModel(){
                     Title = "Other Group"
                 }
             ];
         }
 
-        public ServerTreeViewModel ServerTree
+        public TreeViewModel ServerTree
         {
             get => _serverTree;
             set => Set(ref _serverTree, value);

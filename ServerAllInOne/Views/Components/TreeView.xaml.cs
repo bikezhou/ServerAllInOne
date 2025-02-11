@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace ServerAllInOne.Views.Components
 {
     /// <summary>
-    /// ServerTreeItemView.xaml 的交互逻辑
+    /// TreeView.xaml 的交互逻辑
     /// </summary>
-    public partial class ServerTreeItemView : UserControl
+    public partial class TreeView : UserControl
     {
-        public ServerTreeItemView()
+        public TreeView()
         {
             InitializeComponent();
         }

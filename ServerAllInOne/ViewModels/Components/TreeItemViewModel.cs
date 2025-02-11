@@ -8,12 +8,13 @@ using Caliburn.Micro;
 
 namespace ServerAllInOne.ViewModels.Components
 {
-    public class ServerTreeViewModel : PropertyChangedBase
+    public class TreeItemViewModel : PropertyChangedBase
     {
         private string? _title;
-        private ObservableCollection<ServerTreeItemViewModel> _children;
+        private bool _isExpanded;
+        private ObservableCollection<TreeItemViewModel> _children;
 
-        public ServerTreeViewModel()
+        public TreeItemViewModel()
         {
             _children = [];
         }
@@ -24,11 +25,22 @@ namespace ServerAllInOne.ViewModels.Components
             set => Set(ref _title, value);
         }
 
-        public ObservableCollection<ServerTreeItemViewModel> Children
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set => Set(ref _isExpanded, value);
+        }
+
+        public ObservableCollection<TreeItemViewModel> Children
         {
             get => _children;
             set => Set(ref _children, value ?? []);
         }
 
+
+        public void ExpandButton_Click()
+        {
+            IsExpanded = !IsExpanded;
+        }
     }
 }
