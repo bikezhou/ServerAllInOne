@@ -228,6 +228,7 @@ namespace ServerAllInOne
             {
                 if (tabPage.Controls[0] is ServerConsole server)
                 {
+                    configs.Refresh(server.ServerConfig.UUID);
                     _ = server.StartAsync();
                 }
             });
@@ -313,6 +314,7 @@ namespace ServerAllInOne
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
             {
+                configs.Refresh(server.ServerConfig.UUID);
                 _ = server.StartAsync();
             }
         }
@@ -334,6 +336,8 @@ namespace ServerAllInOne
                 Task.Run(async () =>
                 {
                     await server.StopAsync();
+
+                    configs.Refresh(server.ServerConfig.UUID);
                     await server.StartAsync();
                 });
             }

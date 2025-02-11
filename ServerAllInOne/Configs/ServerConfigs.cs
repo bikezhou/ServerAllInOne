@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,7 @@ namespace ServerAllInOne.Configs
     public class ServerConfigs
     {
         public static string DefaultConfigJson = "Configs\\ServerConfigs.json";
+
         public static ServerConfigs Default
         {
             get
@@ -36,6 +38,29 @@ namespace ServerAllInOne.Configs
         public void Save()
         {
             File.WriteAllText(this.configJsonPath, JsonConvert.SerializeObject(this, Formatting.Indented));
+        }
+
+        public void Refresh(string id)
+        {
+            if (Servers.Count(s => s.UUID == id) == 0)
+                return;
+
+            using (var stream = File.OpenRead(this.configJsonPath)) 
+            {
+                using (var tr = new StreamReader(stream))
+                {
+                    using (var jr = new JsonTextReader(tr))
+                    {
+                        var obj = JObject.Load(jr);
+                        var token = obj.SelectToken("Servers")?.First(token => token.SelectToken("UUID")?.Value<string>() == id);
+                        if(token != null)
+                        {
+
+                        }
+                    }
+                }
+            }
+            
         }
     }
 }
