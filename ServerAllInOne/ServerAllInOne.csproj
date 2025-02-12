@@ -12,4 +12,20 @@
     <PackageReference Include="Caliburn.Micro" Version="4.0.230" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ServerAllInOne.Core\ServerAllInOne.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Assets\Images\console.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\Group\minio.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Config\Other Group\nginx.yaml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

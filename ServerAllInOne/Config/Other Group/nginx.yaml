@@ -1,0 +1,9 @@
+﻿name: Nginx
+codePage: 936
+binPath: C:\path\to\bin\app.exe
+arguments: --arg1 value1 --arg2 value2
+workingDirectory: C:\path\to\working\dir
+description: This is a sample console application.
+stopConfig:
+  method: command
+  command: nginx.exe -s quit

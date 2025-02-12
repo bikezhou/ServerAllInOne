@@ -11,7 +11,7 @@ namespace ServerAllInOne.ViewModels.Components
     public class TreeViewModel : PropertyChangedBase
     {
         private string? title;
-        private ObservableCollection<TreeItemViewModel> children;
+        private readonly ObservableCollection<TreeItemViewModel> children;
 
         public TreeViewModel()
         {
@@ -27,7 +27,6 @@ namespace ServerAllInOne.ViewModels.Components
         public ObservableCollection<TreeItemViewModel> Children
         {
             get => children;
-            set => Set(ref children, value ?? []);
         }
 
     }

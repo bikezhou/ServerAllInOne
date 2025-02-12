@@ -9,11 +9,40 @@
         Title="MainWindowView" 
         WindowStartupLocation="CenterScreen"
         Height="600" Width="1000">
-    <Grid>
+    <Grid SnapsToDevicePixels="True">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition MinWidth="100" Width="260" />
-            <ColumnDefinition MinWidth="100" />
+            <ColumnDefinition MinWidth="100" Width="*" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition MinWidth="100" Width="3*" />
         </Grid.ColumnDefinitions>
-        <ContentControl cal:View.Model="{Binding ServerTree}" Margin="5,5,0,5" />
+        <Border BorderBrush="LightGray" BorderThickness="1" Margin="5,5,0,5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border BorderBrush="LightGray" BorderThickness="0,0,0,1" Padding="8,0">
+                    <TextBlock Text="服务列表" FontSize="10pt" VerticalAlignment="Center" />
+                </Border>
+                <ContentControl Grid.Row="1" cal:View.Model="{Binding ServerTree}" Margin="5,5,0,5" />
+            </Grid>
+        </Border>
+        <GridSplitter Grid.Column="1" Width="5" VerticalAlignment="Stretch" HorizontalAlignment="Center" 
+                      ShowsPreview="True" Background="Transparent" ResizeDirection="Columns" />
+        <Border Grid.Column="2" BorderBrush="LightGray" BorderThickness="1" Margin="0,5,5,5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Border BorderBrush="LightGray" BorderThickness="0,0,0,1">
+                    <StackPanel Orientation="Horizontal">
+                        <Border Width="60" BorderBrush="LightGray" BorderThickness="0,0,1,0">
+                            <TextBlock Text="首页" VerticalAlignment="Center" HorizontalAlignment="Center" />
+                        </Border>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
     </Grid>
 </Window>

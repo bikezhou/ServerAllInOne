@@ -10,24 +10,13 @@
              d:Background="White"
              d:DesignHeight="500" d:DesignWidth="300"
              d:DataContext="{d:DesignInstance Type=viewModel:TreeViewModel,IsDesignTimeCreatable=True}">
-    <Border BorderBrush="LightGray" BorderThickness="1">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <Border BorderBrush="LightGray" BorderThickness="0,0,0,1">
-                <TextBlock Text="服务列表" Margin="5" FontSize="10pt" />
-            </Border>
-            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                <ItemsControl ItemsSource="{Binding Children}">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate>
-                            <ContentControl cal:View.Model="{Binding}" />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-            </ScrollViewer>
-        </Grid>
-    </Border>
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding Children}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ContentControl cal:View.Model="{Binding}" />
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
 </UserControl>

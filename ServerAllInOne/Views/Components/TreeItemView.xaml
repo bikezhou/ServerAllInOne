@@ -24,7 +24,7 @@
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Button cal:Message.Attach="ExpandButton_Click">
+            <Button cal:Message.Attach="[Event Click]=[Action ToggleExpand]">
                 <Button.Resources>
                     <ControlTemplate TargetType="Button" x:Key="expandButton">
                         <TextBlock Text="▶" VerticalAlignment="Center" HorizontalAlignment="Center" />
@@ -35,24 +35,34 @@
                 </Button.Resources>
                 <Button.Style>
                     <Style TargetType="Button">
-                        <Setter Property="Width" Value="30" />
+                        <Setter Property="Width" Value="20" />
+                        <Setter Property="Template" Value="{StaticResource expandButton}" />
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsExpanded}" Value="True">
                                 <Setter Property="Template" Value="{StaticResource collapseButton}" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding IsExpanded}" Value="False">
-                                <Setter Property="Template" Value="{StaticResource expandButton}" />
+                            <DataTrigger Binding="{Binding IsLeaf}" Value="True">
+                                <Setter Property="Visibility" Value="Hidden" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
                 </Button.Style>
             </Button>
-            <TextBlock Grid.Column="1" Text="{Binding Title}" VerticalAlignment="Center" />
+            <Grid Grid.Column="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Border Grid.Column="1">
+                    <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+                </Border>
+                <Button Grid.ColumnSpan="2" Opacity="0" cal:Message.Attach="[Event MouseDoubleClick]=[Action ToggleExpand]" />
+            </Grid>
             <StackPanel Grid.Column="2" Orientation="Horizontal">
                 <!--按钮组-->
             </StackPanel>
         </Grid>
-        <StackPanel Grid.Row="1" Margin="20,0,0,0" Visibility="{Binding IsExpanded,Converter={StaticResource booleanToVisibilityConverter}}">
+        <StackPanel Grid.Row="1" Margin="10,0,0,0" Visibility="{Binding IsExpanded,Converter={StaticResource booleanToVisibilityConverter}}">
             <ItemsControl ItemsSource="{Binding Children}">
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
