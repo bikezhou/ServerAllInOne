@@ -45,7 +45,7 @@ namespace ServerAllInOne.Configs
             if (Servers.Count(s => s.UUID == id) == 0)
                 return;
 
-            using (var stream = File.OpenRead(this.configJsonPath)) 
+            using (var stream = File.OpenRead(this.configJsonPath))
             {
                 using (var tr = new StreamReader(stream))
                 {
@@ -53,14 +53,22 @@ namespace ServerAllInOne.Configs
                     {
                         var obj = JObject.Load(jr);
                         var token = obj.SelectToken("Servers")?.First(token => token.SelectToken("UUID")?.Value<string>() == id);
-                        if(token != null)
+                        if (token != null)
                         {
-
+                            var server = token.ToObject<Server>();
+                            if (server != null)
+                            {
+                                var index = Servers.FindIndex(s => s.UUID == id);
+                                if (index != -1)
+                                {
+                                    Servers[index] = server;
+                                }
+                            }
                         }
                     }
                 }
             }
-            
+
         }
     }
 }

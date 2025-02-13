@@ -2,13 +2,17 @@
 
 namespace ServerAllInOne.Forms
 {
-    public partial class AddServerForm : Form
+    public partial class EditServerForm : Form
     {
         public Server Server { get; private set; }
 
-        public AddServerForm()
+        public EditServerForm()
         {
             InitializeComponent();
+        }
+        public void Edit(Server server)
+        {
+            Server = server;
         }
 
         private void btnSelect_Click(object sender, EventArgs e)
@@ -31,16 +35,20 @@ namespace ServerAllInOne.Forms
                 MessageBox.Show("执行程序路径未指定或文件不存在");
             }
 
-            Server = new Server
+            if (Server == null)
             {
-                UUID = Guid.NewGuid().ToString(),
-                Name = txtName.Text,
-                ExePath = txtExePath.Text,
-                Arguments = txtArguments.Text,
-                WorkingDirectory = txtWorkingDirectory.Text,
-                Sort = (int)nudSort.Value,
-                CanInput = chkCanInput.Checked
-            };
+                Server = new Server
+                {
+                    UUID = Guid.NewGuid().ToString()
+                };
+            }
+
+            Server.Name = txtName.Text;
+            Server.ExePath = (txtExePath.Text ?? "").Replace('\\', '/');
+            Server.Arguments = txtArguments.Text;
+            Server.WorkingDirectory = (txtWorkingDirectory.Text ?? "").Replace('\\', '/');
+            Server.Sort = (int)nudSort.Value;
+            Server.CanInput = chkCanInput.Checked;
         }
     }
 }

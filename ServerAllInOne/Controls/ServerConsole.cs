@@ -63,14 +63,10 @@ namespace ServerAllInOne.Controls
             get => config;
             set
             {
-                if (config != value)
+                config = value;
+                if (cmsRichText.Created)
                 {
-                    config = value;
-
-                    if (cmsRichText.Created)
-                    {
-                        InitContextMenuStrip();
-                    }
+                    InitContextMenuStrip();
                 }
             }
         }

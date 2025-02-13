@@ -123,6 +123,26 @@ namespace ServerAllInOne
             serverCount++;
         }
 
+        private void RefreshServerConfig(ServerConsole server)
+        {
+            configs.Refresh(server.ServerConfig.UUID);
+            var config = configs.Servers.Find(c => c.UUID == server.ServerConfig.UUID);
+            if (config != null)
+            {
+                server.ServerConfig = config;
+
+                if (server.Parent is TabPage tabPage)
+                {
+                    tabPage.Name = config.Name;
+                    if (tabPage.Tag is ServerListItem listItem)
+                    {
+                        listItem.Name = config.Name;
+                        lstbServers.Refresh();
+                    }
+                }
+            }
+        }
+
         private void ServerConsole_ServerStateChanged(object? sender, EventArgs e)
         {
             // 服务状态改变
@@ -183,16 +203,16 @@ namespace ServerAllInOne
 
         private void btnAddServer_Click(object sender, EventArgs e)
         {
-            var addForm = new AddServerForm();
-            if (addForm.ShowDialog(this) == DialogResult.OK)
+            var editForm = new EditServerForm();
+            if (editForm.ShowDialog(this) == DialogResult.OK)
             {
-                if (addForm.Server != null)
+                if (editForm.Server != null)
                 {
-                    configs.Servers.Add(addForm.Server);
+                    configs.Servers.Add(editForm.Server);
                     configs.Servers.Sort((a, b) => a.Sort - b.Sort);
                     configs.Save();
 
-                    AddServerUI(addForm.Server);
+                    AddServerUI(editForm.Server);
 
                     SortServerTab();
                 }
@@ -228,7 +248,7 @@ namespace ServerAllInOne
             {
                 if (tabPage.Controls[0] is ServerConsole server)
                 {
-                    configs.Refresh(server.ServerConfig.UUID);
+                    RefreshServerConfig(server);
                     _ = server.StartAsync();
                 }
             });
@@ -314,7 +334,7 @@ namespace ServerAllInOne
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
             {
-                configs.Refresh(server.ServerConfig.UUID);
+                RefreshServerConfig(server);
                 _ = server.StartAsync();
             }
         }
@@ -337,7 +357,7 @@ namespace ServerAllInOne
                 {
                     await server.StopAsync();
 
-                    configs.Refresh(server.ServerConfig.UUID);
+                    RefreshServerConfig(server);
                     await server.StartAsync();
                 });
             }
@@ -356,7 +376,7 @@ namespace ServerAllInOne
             }
         }
 
-        private void tsmiEditConfig_Click(object sender, EventArgs e)
+        private void tsmiEditServerConfig_Click(object sender, EventArgs e)
         {
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
@@ -406,6 +426,28 @@ namespace ServerAllInOne
         private void lstbServers_DrawItem(object sender, DrawItemEventArgs e)
         {
             var rect = e.Bounds;
+        }
+
+        private void tsmiEditStartConfig_Click(object sender, EventArgs e)
+        {
+            var tabPage = tabControl.SelectedTab;
+            if (tabPage.Controls[0] is ServerConsole server)
+            {
+                var editForm = new EditServerForm();
+                editForm.Edit(server.ServerConfig);
+                if (editForm.ShowDialog(this) == DialogResult.OK)
+                {
+                    if (editForm.Server != null)
+                    {
+                        configs.Servers.Sort((a, b) => a.Sort - b.Sort);
+                        configs.Save();
+
+                        server.ServerConfig = editForm.Server;
+
+                        SortServerTab();
+                    }
+                }
+            }
         }
     }
 }

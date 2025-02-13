@@ -1,6 +1,6 @@
 ﻿namespace ServerAllInOne.Forms
 {
-    partial class AddServerForm
+    partial class EditServerForm
     {
         /// <summary>
         /// Required designer variable.
