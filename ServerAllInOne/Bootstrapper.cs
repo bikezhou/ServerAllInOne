@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using Caliburn.Micro;
+using ServerAllInOne.Core;
 using ServerAllInOne.ViewModels;
 
 namespace ServerAllInOne
@@ -24,6 +25,8 @@ namespace ServerAllInOne
 
             container.Singleton<IWindowManager, WindowManager>();
             container.Singleton<IEventAggregator, EventAggregator>();
+            // 进程管理
+            container.Singleton<ProcessManager>();
 
             container.PerRequest<MainWindowViewModel>();
         }

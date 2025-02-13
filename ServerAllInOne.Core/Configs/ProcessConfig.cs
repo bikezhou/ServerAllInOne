@@ -9,7 +9,7 @@ namespace ServerAllInOne.Core.Configs
     /// <summary>
     /// 控制台程序配置
     /// </summary>
-    public class ConsoleConfig
+    public class ProcessConfig
     {
         /// <summary>
         /// 控制台名称
@@ -44,6 +44,6 @@ namespace ServerAllInOne.Core.Configs
         /// <summary>
         /// 程序停止配置
         /// </summary>
-        public ConsoleStopConfig? StopConfig { get; set; }
+        public ProcessStopConfig? StopConfig { get; set; }
     }
 }

@@ -18,15 +18,16 @@ namespace ServerAllInOne.ViewModels
     public class MainWindowViewModel : PropertyChangedBase, IHandle<TreeItemChildrenLoadEvent>
     {
         private readonly TreeViewModel serverTree;
-        private readonly ConsoleController consoleController;
         private readonly IEventAggregator eventAggregator;
+        private readonly ProcessManager processManager;
 
-        public MainWindowViewModel()
+        public MainWindowViewModel(IEventAggregator eventAggregator, ProcessManager processManager)
         {
             serverTree = new TreeViewModel();
-            consoleController = ConsoleController.Default;
 
-            eventAggregator = IoC.Get<IEventAggregator>();
+            this.processManager = processManager;
+
+            this.eventAggregator = eventAggregator;
             eventAggregator.SubscribeOnBackgroundThread(this);
 
             _ = LoadAsync();
@@ -41,24 +42,13 @@ namespace ServerAllInOne.ViewModels
         {
             await Task.Run(() =>
             {
-                var groups = consoleController.GetGroupList();
-                foreach (var item in groups)
-                {
-                    serverTree.Children.Add(new TreeItemViewModel
-                    {
-                        Title = item.Name,
-                        Tag = item
-                    });
-                }
-
-                var items = consoleController.GetItemList();
+                var items = processManager.GetNodes();
                 foreach (var item in items)
                 {
                     serverTree.Children.Add(new TreeItemViewModel
                     {
                         Title = item.Name,
-                        IsLeaf = true,
-                        Icon = new BitmapImage(new Uri("/Assets/Images/console.png", UriKind.RelativeOrAbsolute)),
+                        IsLeaf = item.NodeType == 0,
                         Tag = item
                     });
                 }
@@ -70,35 +60,21 @@ namespace ServerAllInOne.ViewModels
             await Task.Run(() =>
             {
                 var treeItem = message.Item;
-                if (treeItem.Tag is ConsoleGroupModel group)
+                if (treeItem.Tag is NodeItem parent)
                 {
-                    if (group.Id != null)
+                    var items = processManager.GetNodes(parent.Id);
+                    Execute.OnUIThread(() =>
                     {
-                        var groups = consoleController.GetGroupList(group.Id);
-                        var items = consoleController.GetItemList(group.Id);
-
-                        Execute.OnUIThread(() =>
+                        foreach (var item in items)
                         {
-                            foreach (var item in groups)
+                            treeItem.Children.Add(new TreeItemViewModel
                             {
-                                treeItem.Children.Add(new TreeItemViewModel
-                                {
-                                    Title = item.Name,
-                                    Tag = item
-                                });
-                            }
-                            foreach (var item in items)
-                            {
-                                treeItem.Children.Add(new TreeItemViewModel
-                                {
-                                    Title = item.Name,
-                                    IsLeaf = true,
-                                    Icon = new BitmapImage(new Uri("/Assets/Images/console.png", UriKind.RelativeOrAbsolute)),
-                                    Tag = item
-                                });
-                            }
-                        });
-                    }
+                                Title = item.Name,
+                                IsLeaf = item.NodeType == 0,
+                                Tag = item
+                            });
+                        }
+                    });
                 }
             }, cancellationToken);
         }

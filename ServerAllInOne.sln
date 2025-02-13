@@ -8,9 +8,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "解决方案项", "解决�
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAllInOne", "ServerAllInOne\ServerAllInOne.csproj", "{E53410A5-23FA-4165-9D45-8B8E9F559A42}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerAllInOne", "ServerAllInOne\ServerAllInOne.csproj", "{E53410A5-23FA-4165-9D45-8B8E9F559A42}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerAllInOne.Core", "ServerAllInOne.Core\ServerAllInOne.Core.csproj", "{3E5485E6-D508-4394-AB70-D6D7A2449816}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServerAllInOne.Core", "ServerAllInOne.Core\ServerAllInOne.Core.csproj", "{3E5485E6-D508-4394-AB70-D6D7A2449816}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

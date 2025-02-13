@@ -20,10 +20,10 @@
     <None Update="Assets\Images\console.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Config\Group\minio.yaml">
+    <None Update="Config\Process\Group\api.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Config\Other Group\nginx.yaml">
+    <None Update="Config\Process\minio.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

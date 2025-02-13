@@ -74,6 +74,9 @@ namespace ServerAllInOne.ViewModels.Components
 
         public void ToggleExpand()
         {
+            if (IsLeaf)
+                return;
+
             if (!IsExpanded && !isLoadedChildren)
             {
                 Task.Run(async () =>

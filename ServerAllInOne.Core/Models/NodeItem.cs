@@ -6,25 +6,23 @@ using System.Threading.Tasks;
 
 namespace ServerAllInOne.Core.Models
 {
-    public class ConsoleItemModel
+    public class NodeItem
     {
-        /// <summary>
-        /// id
-        /// </summary>
-        public string? Id { get; set; }
+        public required string Id { get; set; }
+
+        public string? ParentId { get; set; }
 
         /// <summary>
-        /// 名称
+        /// 节点类型：0-进程，1-分组
         /// </summary>
+        public int NodeType { get; set; }
+
         public string? Name { get; set; }
 
-        /// <summary>
-        /// 描述
-        /// </summary>
         public string? Description { get; set; }
 
         /// <summary>
-        /// 运行状态，0-停止，1-运行中
+        /// 状态：0-停止，1-运行中
         /// </summary>
         public int Status { get; set; }
     }

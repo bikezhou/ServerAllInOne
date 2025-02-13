@@ -9,7 +9,7 @@ namespace ServerAllInOne.Core.Configs
     /// <summary>
     /// 控制台程序停止配置
     /// </summary>
-    public class ConsoleStopConfig
+    public class ProcessStopConfig
     {
         /// <summary>
         /// 停止方法：event(事件，如ctrl+c)，input(控制台输入，如exit)，command(执行命令行，如nginx -s quit)，kill(直接kill进程)
