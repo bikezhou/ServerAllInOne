@@ -99,7 +99,10 @@ namespace ServerAllInOne
 
         private void AddServerUI(Server server)
         {
-            var tabPage = new TabPage(server.Name);
+            var tabPage = new TabPage(server.UUID)
+            {
+                Text = server.Name
+            };
             var serverConsole = new ServerConsole()
             {
                 Dock = DockStyle.Fill,
@@ -133,7 +136,7 @@ namespace ServerAllInOne
 
                 if (server.Parent is TabPage tabPage)
                 {
-                    tabPage.Name = config.Name;
+                    tabPage.Text = $"{config.Name}{(server.Running ? $"[{server.ProcessId}]" : "")}";
                     if (tabPage.Tag is ServerListItem listItem)
                     {
                         listItem.Name = config.Name;
@@ -180,7 +183,10 @@ namespace ServerAllInOne
 
         private void SortServerTab()
         {
+            var selectedTab = tabControl.SelectedTab;
+
             tabControl.SuspendLayout();
+
             var tabPages = new List<TabPage>();
 
             ServerTabForeach(tabPage =>
@@ -198,7 +204,9 @@ namespace ServerAllInOne
                 tabControl.TabPages.Add(tabPage);
             }
 
-            tabControl.ResumeLayout(true);
+            tabControl.SelectedTab = selectedTab;
+
+            tabControl.ResumeLayout(false);
         }
 
         private void btnAddServer_Click(object sender, EventArgs e)
@@ -376,7 +384,7 @@ namespace ServerAllInOne
             }
         }
 
-        private void tsmiEditServerConfig_Click(object sender, EventArgs e)
+        private void tsmiEditConfig_Click(object sender, EventArgs e)
         {
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
@@ -428,7 +436,7 @@ namespace ServerAllInOne
             var rect = e.Bounds;
         }
 
-        private void tsmiEditStartConfig_Click(object sender, EventArgs e)
+        private void tsmiEditServer_Click(object sender, EventArgs e)
         {
             var tabPage = tabControl.SelectedTab;
             if (tabPage.Controls[0] is ServerConsole server)
@@ -442,7 +450,7 @@ namespace ServerAllInOne
                         configs.Servers.Sort((a, b) => a.Sort - b.Sort);
                         configs.Save();
 
-                        server.ServerConfig = editForm.Server;
+                        RefreshServerConfig(server);
 
                         SortServerTab();
                     }

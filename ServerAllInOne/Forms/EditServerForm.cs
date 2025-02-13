@@ -13,6 +13,16 @@ namespace ServerAllInOne.Forms
         public void Edit(Server server)
         {
             Server = server;
+
+            txtName.Text = server.Name;
+            txtExePath.Text = server.ExePath;
+            txtArguments.Text = server.Arguments;
+            txtWorkingDirectory.Text = server.WorkingDirectory;
+            nudSort.Value = server.Sort;
+            chkCanInput.Checked = server.CanInput;
+
+            Text = "更新服务";
+            btnOk.Text = "更新";
         }
 
         private void btnSelect_Click(object sender, EventArgs e)

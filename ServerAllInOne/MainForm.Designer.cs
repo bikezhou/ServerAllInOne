@@ -43,11 +43,10 @@ namespace ServerAllInOne
             tsmiStartServer = new ToolStripMenuItem();
             tsmiStopServer = new ToolStripMenuItem();
             tsmiRestartServer = new ToolStripMenuItem();
+            tsmiEditServer = new ToolStripMenuItem();
             toolStripMenuItem1 = new ToolStripSeparator();
             tsmiOpenFolder = new ToolStripMenuItem();
             tsmiEditConfig = new ToolStripMenuItem();
-            tsmiEditStartConfig = new ToolStripMenuItem();
-            tsmiEditServerConfig = new ToolStripMenuItem();
             notifyIcon = new NotifyIcon(components);
             cmsMain = new ContextMenuStrip(components);
             tsmiOpenMainForm = new ToolStripMenuItem();
@@ -83,6 +82,7 @@ namespace ServerAllInOne
             tableLayoutPanel.Controls.Add(btnStopServer, 3, 1);
             tableLayoutPanel.Controls.Add(btnAddServer, 1, 1);
             tableLayoutPanel.Controls.Add(btnStartServer, 2, 1);
+            tableLayoutPanel.Controls.Add(lstbServers, 1, 2);
             tableLayoutPanel.Dock = DockStyle.Fill;
             tableLayoutPanel.Location = new Point(3, 3);
             tableLayoutPanel.Name = "tableLayoutPanel";
@@ -155,9 +155,9 @@ namespace ServerAllInOne
             // 
             // cmsTabMenu
             // 
-            cmsTabMenu.Items.AddRange(new ToolStripItem[] { tsmiStartServer, tsmiStopServer, tsmiRestartServer, toolStripMenuItem1, tsmiOpenFolder, tsmiEditConfig });
+            cmsTabMenu.Items.AddRange(new ToolStripItem[] { tsmiStartServer, tsmiStopServer, tsmiRestartServer, tsmiEditServer, toolStripMenuItem1, tsmiOpenFolder, tsmiEditConfig });
             cmsTabMenu.Name = "contextMenuStrip1";
-            cmsTabMenu.Size = new Size(181, 142);
+            cmsTabMenu.Size = new Size(125, 142);
             cmsTabMenu.Opening += cmsTabMenu_Opening;
             // 
             // tsmiStartServer
@@ -181,6 +181,13 @@ namespace ServerAllInOne
             tsmiRestartServer.Text = "重启服务";
             tsmiRestartServer.Click += tsmiRestartServer_Click;
             // 
+            // tsmiEditServer
+            // 
+            tsmiEditServer.Name = "tsmiEditServer";
+            tsmiEditServer.Size = new Size(124, 22);
+            tsmiEditServer.Text = "编辑";
+            tsmiEditServer.Click += tsmiEditServer_Click;
+            // 
             // toolStripMenuItem1
             // 
             toolStripMenuItem1.Name = "toolStripMenuItem1";
@@ -195,24 +202,10 @@ namespace ServerAllInOne
             // 
             // tsmiEditConfig
             // 
-            tsmiEditConfig.DropDownItems.AddRange(new ToolStripItem[] { tsmiEditStartConfig, tsmiEditServerConfig });
             tsmiEditConfig.Name = "tsmiEditConfig";
-            tsmiEditConfig.Size = new Size(180, 22);
+            tsmiEditConfig.Size = new Size(124, 22);
             tsmiEditConfig.Text = "配置编辑";
-            // 
-            // tsmiEditStartConfig
-            // 
-            tsmiEditStartConfig.Name = "tsmiEditStartConfig";
-            tsmiEditStartConfig.Size = new Size(180, 22);
-            tsmiEditStartConfig.Text = "启动配置";
-            tsmiEditStartConfig.Click += tsmiEditStartConfig_Click;
-            // 
-            // tsmiEditServerConfig
-            // 
-            tsmiEditServerConfig.Name = "tsmiEditServerConfig";
-            tsmiEditServerConfig.Size = new Size(180, 22);
-            tsmiEditServerConfig.Text = "服务配置";
-            tsmiEditServerConfig.Click += tsmiEditServerConfig_Click;
+            tsmiEditConfig.Click += tsmiEditConfig_Click;
             // 
             // notifyIcon
             // 
@@ -299,7 +292,6 @@ namespace ServerAllInOne
         private ServerList lstbServers;
         private ToolStripMenuItem tsmiOpenFolder;
         private ToolStripMenuItem tsmiEditConfig;
-        private ToolStripMenuItem tsmiEditStartConfig;
-        private ToolStripMenuItem tsmiEditServerConfig;
+        private ToolStripMenuItem tsmiEditServer;
     }
 }
