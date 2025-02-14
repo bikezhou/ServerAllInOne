@@ -148,12 +148,15 @@ namespace ServerAllInOne
 
         private void ServerConsole_ServerStateChanged(object? sender, EventArgs e)
         {
+            if (IsDisposed)
+                return;
+
             // 服务状态改变
             if (sender is ServerConsole server)
             {
                 ServerTabForeach(tabPage =>
                 {
-                    if (tabPage.Controls[0] == server)
+                    if (tabPage.Controls.Count > 0 && tabPage.Controls[0] == server)
                     {
                         var c = server.ServerConfig;
                         if (server.Running)
@@ -279,10 +282,16 @@ namespace ServerAllInOne
                     ? "ServerAllInOne.Assets.Icons.server_windows.ico"
                     : "ServerAllInOne.Assets.Icons.server_windows_stop.ico";
 
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(iconPath);
-
-            notifyIcon.Icon = stream != null ? new Icon(stream) : null;
-            notifyIcon.Text = runningServerCount > 0 ? $"{appConfig.Name} - 正在运行：{runningServerCount}/{serverCount}" : $"{appConfig.Name} - 服务未运行";
+            try
+            {
+                var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(iconPath);
+                notifyIcon.Icon = stream != null ? new Icon(stream) : null;
+                notifyIcon.Text = runningServerCount > 0 ? $"{appConfig.Name} - 正在运行：{runningServerCount}/{serverCount}" : $"{appConfig.Name} - 服务未运行";
+            }
+            catch (Exception)
+            {
+                // ignore
+            }
         }
 
         private void ServerTabForeach(Action<TabPage> action)
@@ -403,6 +412,7 @@ namespace ServerAllInOne
 
                 var editorForm = new ConfigEditorForm()
                 {
+                    WorkingDirectory = workingDirectory,
                     Configs = server.ServerConfig.Configs.Select(x => new KeyValuePair<string, string>(x.Name, Path.GetFullPath(Path.Combine(workingDirectory, x.Path)))).ToArray()
                 };
                 editorForm.Show(this);

@@ -61,11 +61,16 @@ namespace ServerAllInOne.Configs
         /// <summary>
         /// 配置文件
         /// </summary>
-        public Config[] Configs { get; set; }
+        public ServerConfig[] Configs { get; set; }
+
+        /// <summary>
+        /// 服务停止配置
+        /// </summary>
+        public ServerStopConfig StopConfig { get; set; }
 
     }
 
-    public class Config
+    public class ServerConfig
     {
         public string Name { get; set; }
 
@@ -88,5 +93,20 @@ namespace ServerAllInOne.Configs
         /// 子菜单
         /// </summary>
         public ContextMenu[] Items { get; set; }
+    }
+
+    public class ServerStopConfig
+    {
+        /// <summary>
+        /// 服务停止方法：event(如ctrl+c)，input(如exit)，command(如nginx.exe -s quit)，kill
+        /// </summary>
+        public string Method { get; set; }
+
+        /// <summary>
+        /// 服务停止指令
+        /// </summary>
+        public string Command { get; set; }
+
+        public int Timeout { get; set; } = 1000;
     }
 }

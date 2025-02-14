@@ -31,6 +31,7 @@ namespace ServerAllInOne.Forms
             if (openFileDlg.ShowDialog() == DialogResult.OK)
             {
                 txtExePath.Text = openFileDlg.FileName;
+                txtWorkingDirectory.Text = Path.GetDirectoryName(openFileDlg.FileName) ?? "";
             }
         }
 

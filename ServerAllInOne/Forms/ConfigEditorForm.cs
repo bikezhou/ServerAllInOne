@@ -17,11 +17,13 @@ namespace ServerAllInOne.Forms
 
         private int _selectedIndex = -1;
 
+        public string WorkingDirectory { get; set; }
+
         public KeyValuePair<string, string>[] Configs { get; set; }
 
         public bool ConfigModified
         {
-            get => !string.IsNullOrEmpty(_openConfigPath) && _originConfig != richEditor.Text;
+            get => !string.IsNullOrEmpty(_openConfigPath) && File.Exists(_openConfigPath) && _originConfig != richEditor.Text;
         }
 
         public ConfigEditorForm()
@@ -55,7 +57,7 @@ namespace ServerAllInOne.Forms
             CheckConfigSave();
 
             var item = listConfig.SelectedItem;
-            _openConfigPath = ((KeyValuePair<string, string>)item).Value;
+            _openConfigPath = Path.Combine(WorkingDirectory, ((KeyValuePair<string, string>)item).Value);
             richEditor.Clear();
             richEditor.ClearUndo();
             if (File.Exists(_openConfigPath))

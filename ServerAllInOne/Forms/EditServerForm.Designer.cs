@@ -158,7 +158,7 @@
             label5.TabIndex = 5;
             label5.Text = "工作目录：";
             // 
-            // AddServerForm
+            // EditServerForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -178,7 +178,7 @@
             Controls.Add(label1);
             Controls.Add(txtName);
             FormBorderStyle = FormBorderStyle.FixedToolWindow;
-            Name = "AddServerForm";
+            Name = "EditServerForm";
             ShowInTaskbar = false;
             StartPosition = FormStartPosition.CenterParent;
             Text = "添加服务";

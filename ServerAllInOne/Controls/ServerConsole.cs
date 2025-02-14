@@ -3,6 +3,7 @@ using ServerAllInOne.Configs;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 
 namespace ServerAllInOne.Controls
@@ -95,11 +96,14 @@ namespace ServerAllInOne.Controls
                     if (writeCache.Count == 0)
                         continue;
 
+                    List<string> lines = new List<string>();
                     lock (writeCache)
                     {
-                        WriteText(string.Join(Environment.NewLine, writeCache) + Environment.NewLine);
+                        lines.AddRange(writeCache);
                         writeCache.Clear();
                     }
+
+                    WriteText(string.Join(Environment.NewLine, lines) + Environment.NewLine);
                 }
             });
 
@@ -287,6 +291,22 @@ namespace ServerAllInOne.Controls
             });
         }
 
+        private void WaitForExit()
+        {
+            if (process == null)
+                return;
+
+            var timeout = config.StopConfig?.Timeout ?? 1000;
+            if (timeout > 0)
+            {
+                process.WaitForExit(timeout);
+            }
+            else
+            {
+                process.WaitForExit();
+            }
+        }
+
         public void Stop()
         {
             if (running && process != null)
@@ -301,43 +321,67 @@ namespace ServerAllInOne.Controls
 
                 try
                 {
-                    if (AttachConsole((uint)process.Id))
+                    var stopConfig = config.StopConfig ?? new ServerStopConfig
                     {
-                        // 设置自己的ctrl+c处理，防止自己被终止
-                        SetConsoleCtrlHandler(handler, true);
-                        try
-                        {
-                            // 发送ctrl+c（注意：这是向所有共享该console的进程发送）
-                            if (!GenerateConsoleCtrlEvent((uint)CtrlTypes.CTRL_C_EVENT, 0))
-                                return;
+                        Method = "kill",
+                        Timeout = 1000
+                    };
 
-                            process.CancelErrorRead();
-                            process.CancelOutputRead();
+                    switch (stopConfig.Method)
+                    {
+                        case "event":
+                            if (AttachConsole((uint)process.Id))
+                            {
+                                CtrlTypes ctrlEvent;
+                                switch (stopConfig.Command)
+                                {
+                                    case "ctrl+c":
+                                    default:
+                                        ctrlEvent = CtrlTypes.CTRL_C_EVENT;
+                                        break;
+                                }
 
-                            // 等待3s
-                            process.WaitForExit(3000);
-                        }
-                        finally
-                        {
-                            FreeConsole();
-                            // 重置此参数
-                            SetConsoleCtrlHandler(handler, false);
-                        }
+                                // 设置自己的ctrl+c处理，防止自己被终止
+                                SetConsoleCtrlHandler(handler, true);
+                                try
+                                {
+                                    if (!GenerateConsoleCtrlEvent((uint)ctrlEvent, (uint)process.SessionId))
+                                        return;
+                                }
+                                finally
+                                {
+                                    FreeConsole();
+                                    // 重置此参数
+                                    SetConsoleCtrlHandler(handler, false);
+                                }
+                            }
+                            break;
+                        case "input":
+                            WriteCommand(stopConfig.Command, true);
+                            break;
+                        case "execute":
+                        case "command":
+                            var proc = Process.Start(new ProcessStartInfo
+                            {
+                                FileName = "cmd.exe",
+                                Arguments = $"/c {stopConfig.Command}",
+                                WorkingDirectory = Path.GetFullPath((string.IsNullOrEmpty(config.WorkingDirectory) ? Path.GetDirectoryName(config.ExePath) : config.WorkingDirectory) ?? ""),
+                            });
+                            proc?.WaitForExit(1000);
+                            break;
+                        case "kill":
+                            // 执行kill
+                            process.Kill();
+                            break;
                     }
+
+                    WaitForExit();
                 }
                 finally
                 {
                     if (running)
                     {
-                        WriteTextLine("服务停止失败，执行Kill");
-                        // 执行kill
-                        process.Kill();
-                        process.WaitForExit(1000);
-
-                        if (running)
-                        {
-                            WriteTextLine("服务停止失败");
-                        }
+                        WriteTextLine("服务停止失败");
                     }
                 }
             }
@@ -399,6 +443,9 @@ namespace ServerAllInOne.Controls
 
         private void WriteText(string? text)
         {
+            if (IsDisposed)
+                return;
+
             UIInvoke(() =>
             {
                 if (string.IsNullOrEmpty(text))
@@ -536,9 +583,9 @@ namespace ServerAllInOne.Controls
             }
         }
 
-        private void WriteCommand(string command)
+        private void WriteCommand(string command, bool forceWrite = false)
         {
-            if (ServerConfig?.CanInput ?? false)
+            if (forceWrite || (ServerConfig?.CanInput ?? false))
             {
                 WriteTextLine(command);
                 if (process != null)
