@@ -31,6 +31,8 @@
             listConfig = new ListBox();
             richEditor = new RichTextBox();
             splitter1 = new Splitter();
+            panel1 = new Panel();
+            panel1.SuspendLayout();
             SuspendLayout();
             // 
             // listConfig
@@ -48,11 +50,11 @@
             // richEditor
             // 
             richEditor.AcceptsTab = true;
-            richEditor.BorderStyle = BorderStyle.FixedSingle;
+            richEditor.BorderStyle = BorderStyle.None;
             richEditor.Dock = DockStyle.Fill;
-            richEditor.Location = new Point(174, 0);
+            richEditor.Location = new Point(5, 5);
             richEditor.Name = "richEditor";
-            richEditor.Size = new Size(670, 461);
+            richEditor.Size = new Size(660, 451);
             richEditor.TabIndex = 1;
             richEditor.Text = "";
             richEditor.WordWrap = false;
@@ -66,12 +68,23 @@
             splitter1.TabIndex = 2;
             splitter1.TabStop = false;
             // 
+            // panel1
+            // 
+            panel1.BackColor = Color.White;
+            panel1.Controls.Add(richEditor);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(174, 0);
+            panel1.Name = "panel1";
+            panel1.Padding = new Padding(5);
+            panel1.Size = new Size(670, 461);
+            panel1.TabIndex = 3;
+            // 
             // ConfigEditorForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(844, 461);
-            Controls.Add(richEditor);
+            Controls.Add(panel1);
             Controls.Add(splitter1);
             Controls.Add(listConfig);
             KeyPreview = true;
@@ -79,6 +92,7 @@
             StartPosition = FormStartPosition.CenterScreen;
             Text = "配置编辑器";
             KeyDown += ConfigEditorForm_KeyDown;
+            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -87,5 +101,6 @@
         private ListBox listConfig;
         private RichTextBox richEditor;
         private Splitter splitter1;
+        private Panel panel1;
     }
 }

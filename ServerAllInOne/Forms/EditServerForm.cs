@@ -21,6 +21,18 @@ namespace ServerAllInOne.Forms
             nudSort.Value = server.Sort;
             chkCanInput.Checked = server.CanInput;
 
+            if (server.StopConfig != null)
+            {
+                cmbStopMethod.SelectedIndex = cmbStopMethod.Items.IndexOf(server.StopConfig.Method);
+                txtStopCommand.Text = server.StopConfig.Command;
+            }
+            else
+            {
+                cmbStopMethod.SelectedIndex = 0;
+                txtStopCommand.Text = "ctrl+c";
+            }
+
+
             Text = "更新服务";
             btnOk.Text = "更新";
         }
@@ -60,6 +72,10 @@ namespace ServerAllInOne.Forms
             Server.WorkingDirectory = (txtWorkingDirectory.Text ?? "").Replace('\\', '/');
             Server.Sort = (int)nudSort.Value;
             Server.CanInput = chkCanInput.Checked;
+            Server.StopConfig ??= new ServerStopConfig();
+
+            Server.StopConfig.Method = cmbStopMethod.Text;
+            Server.StopConfig.Command = txtStopCommand.Text;
         }
     }
 }

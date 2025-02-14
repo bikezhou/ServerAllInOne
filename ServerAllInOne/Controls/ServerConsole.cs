@@ -1,6 +1,8 @@
 ﻿using Microsoft.VisualBasic.ApplicationServices;
 using ServerAllInOne.Configs;
 using System.Diagnostics;
+using System.Management;
+using System.Reflection.Metadata;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
@@ -307,6 +309,68 @@ namespace ServerAllInOne.Controls
             }
         }
 
+        private void ExitProcess(Process proc, string method, string command)
+        {
+            if (proc == null)
+            {
+                return;
+            }
+
+            ManagementObjectSearcher searcher = new($"Select * From Win32_Process Where ParentProcessID={proc.Id}");
+            ManagementObjectCollection moc = searcher.Get();
+
+            foreach (ManagementObject mo in moc)
+            {
+                ExitProcess(Process.GetProcessById(Convert.ToInt32(mo["ProcessID"])), method, command);
+            }
+
+            if (method == "kill")
+            {
+                proc.Kill();
+                proc.WaitForExit();
+            }
+            else if (method == "event")
+            {
+                // 未成功
+                var handler = new ConsoleCtrlDelegate(c =>
+                {
+                    return c == CtrlTypes.CTRL_C_EVENT;
+                });
+
+                CtrlTypes ctrlEvent;
+                switch (command)
+                {
+                    case "ctrl+c":
+                    default:
+                        ctrlEvent = CtrlTypes.CTRL_C_EVENT;
+                        break;
+                }
+
+                if (AttachConsole((uint)proc.Id))
+                {
+                    // 设置自己的ctrl+c处理，防止自己被终止
+                    SetConsoleCtrlHandler(handler, true);
+                    try
+                    {
+                        if (!GenerateConsoleCtrlEvent((uint)ctrlEvent, 0))
+                            return;
+
+                        if (!proc.WaitForExit(5000))
+                        {
+                            proc.Kill();
+                            proc.WaitForExit();
+                        }
+                    }
+                    finally
+                    {
+                        FreeConsole();
+                        // 重置此参数
+                        SetConsoleCtrlHandler(handler, false);
+                    }
+                }
+            }
+        }
+
         public void Stop()
         {
             if (running && process != null)
@@ -330,31 +394,7 @@ namespace ServerAllInOne.Controls
                     switch (stopConfig.Method)
                     {
                         case "event":
-                            if (AttachConsole((uint)process.Id))
-                            {
-                                CtrlTypes ctrlEvent;
-                                switch (stopConfig.Command)
-                                {
-                                    case "ctrl+c":
-                                    default:
-                                        ctrlEvent = CtrlTypes.CTRL_C_EVENT;
-                                        break;
-                                }
-
-                                // 设置自己的ctrl+c处理，防止自己被终止
-                                SetConsoleCtrlHandler(handler, true);
-                                try
-                                {
-                                    if (!GenerateConsoleCtrlEvent((uint)ctrlEvent, (uint)process.SessionId))
-                                        return;
-                                }
-                                finally
-                                {
-                                    FreeConsole();
-                                    // 重置此参数
-                                    SetConsoleCtrlHandler(handler, false);
-                                }
-                            }
+                            ExitProcess(process, stopConfig.Method, stopConfig.Command);
                             break;
                         case "input":
                             WriteCommand(stopConfig.Command, true);
@@ -370,8 +410,7 @@ namespace ServerAllInOne.Controls
                             proc?.WaitForExit(1000);
                             break;
                         case "kill":
-                            // 执行kill
-                            process.Kill();
+                            ExitProcess(process, stopConfig.Method, stopConfig.Command);
                             break;
                     }
 
@@ -403,15 +442,6 @@ namespace ServerAllInOne.Controls
             });
         }
 
-
-        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
-        {
-            if (!string.IsNullOrEmpty(e.Data))
-            {
-                WriteTextLine(e.Data);
-            }
-        }
-
         private void Process_Exited(object? sender, EventArgs e)
         {
             process = null;
@@ -422,6 +452,15 @@ namespace ServerAllInOne.Controls
             {
                 ServerStateChanged?.Invoke(this, EventArgs.Empty);
             });
+        }
+
+
+        private void Process_ErrorDataReceived(object sender, DataReceivedEventArgs e)
+        {
+            if (!string.IsNullOrEmpty(e.Data))
+            {
+                WriteTextLine(e.Data);
+            }
         }
 
         private void Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
