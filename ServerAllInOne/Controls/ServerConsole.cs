@@ -309,6 +309,12 @@ namespace ServerAllInOne.Controls
             }
         }
 
+        /// <summary>
+        /// 退出进程及其子进程
+        /// </summary>
+        /// <param name="proc">进程</param>
+        /// <param name="method">方法：event、kill</param>
+        /// <param name="command"></param>
         private void ExitProcess(Process proc, string method, string command)
         {
             if (proc == null)
