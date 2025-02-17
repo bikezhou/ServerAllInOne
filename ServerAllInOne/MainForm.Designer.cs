@@ -53,11 +53,16 @@ namespace ServerAllInOne
             tsmiMainStartServer = new ToolStripMenuItem();
             tsmiMainStopServer = new ToolStripMenuItem();
             tsmiExit = new ToolStripMenuItem();
+            panel1 = new Panel();
+            lblVersion = new Label();
+            panel2 = new Panel();
             tabHome.SuspendLayout();
             tableLayoutPanel.SuspendLayout();
             tabControl.SuspendLayout();
             cmsTabMenu.SuspendLayout();
             cmsMain.SuspendLayout();
+            panel1.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // tabHome
@@ -66,7 +71,7 @@ namespace ServerAllInOne
             tabHome.Location = new Point(4, 26);
             tabHome.Name = "tabHome";
             tabHome.Padding = new Padding(3);
-            tabHome.Size = new Size(966, 501);
+            tabHome.Size = new Size(966, 475);
             tabHome.TabIndex = 0;
             tabHome.Text = "主页";
             tabHome.UseVisualStyleBackColor = true;
@@ -90,15 +95,15 @@ namespace ServerAllInOne
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
             tableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel.Size = new Size(960, 495);
+            tableLayoutPanel.Size = new Size(960, 469);
             tableLayoutPanel.TabIndex = 1;
             // 
             // btnStopServer
             // 
             btnStopServer.Dock = DockStyle.Fill;
-            btnStopServer.Font = new Font("Microsoft YaHei UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            btnStopServer.Font = new Font("Microsoft YaHei UI", 9F);
             btnStopServer.ForeColor = Color.Red;
-            btnStopServer.Location = new Point(543, 220);
+            btnStopServer.Location = new Point(543, 207);
             btnStopServer.Name = "btnStopServer";
             btnStopServer.Size = new Size(114, 54);
             btnStopServer.TabIndex = 2;
@@ -109,7 +114,7 @@ namespace ServerAllInOne
             // btnAddServer
             // 
             btnAddServer.Dock = DockStyle.Fill;
-            btnAddServer.Location = new Point(303, 220);
+            btnAddServer.Location = new Point(303, 207);
             btnAddServer.Name = "btnAddServer";
             btnAddServer.Size = new Size(114, 54);
             btnAddServer.TabIndex = 1;
@@ -120,7 +125,7 @@ namespace ServerAllInOne
             // btnStartServer
             // 
             btnStartServer.Dock = DockStyle.Fill;
-            btnStartServer.Location = new Point(423, 220);
+            btnStartServer.Location = new Point(423, 207);
             btnStartServer.Name = "btnStartServer";
             btnStartServer.Size = new Size(114, 54);
             btnStartServer.TabIndex = 0;
@@ -135,9 +140,9 @@ namespace ServerAllInOne
             lstbServers.DrawMode = DrawMode.OwnerDrawFixed;
             lstbServers.FormattingEnabled = true;
             lstbServers.ItemHeight = 24;
-            lstbServers.Location = new Point(303, 280);
+            lstbServers.Location = new Point(303, 267);
             lstbServers.Name = "lstbServers";
-            lstbServers.Size = new Size(354, 212);
+            lstbServers.Size = new Size(354, 199);
             lstbServers.TabIndex = 3;
             lstbServers.DrawItem += lstbServers_DrawItem;
             // 
@@ -148,7 +153,7 @@ namespace ServerAllInOne
             tabControl.Location = new Point(5, 5);
             tabControl.Name = "tabControl";
             tabControl.SelectedIndex = 0;
-            tabControl.Size = new Size(974, 531);
+            tabControl.Size = new Size(974, 505);
             tabControl.TabIndex = 0;
             tabControl.MouseDown += tabControl_MouseDown;
             tabControl.MouseLeave += tabControl_MouseLeave;
@@ -250,15 +255,46 @@ namespace ServerAllInOne
             tsmiExit.Text = "退出";
             tsmiExit.Click += tsmiExit_Click;
             // 
+            // panel1
+            // 
+            panel1.BackColor = Color.White;
+            panel1.Controls.Add(lblVersion);
+            panel1.Dock = DockStyle.Bottom;
+            panel1.Location = new Point(0, 515);
+            panel1.Name = "panel1";
+            panel1.Padding = new Padding(5, 0, 5, 0);
+            panel1.Size = new Size(984, 26);
+            panel1.TabIndex = 2;
+            // 
+            // lblVersion
+            // 
+            lblVersion.Dock = DockStyle.Left;
+            lblVersion.Location = new Point(5, 0);
+            lblVersion.Name = "lblVersion";
+            lblVersion.Size = new Size(104, 26);
+            lblVersion.TabIndex = 0;
+            lblVersion.Text = "1.0.2502.1701";
+            lblVersion.TextAlign = ContentAlignment.MiddleLeft;
+            // 
+            // panel2
+            // 
+            panel2.Controls.Add(tabControl);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(0, 0);
+            panel2.Name = "panel2";
+            panel2.Padding = new Padding(5);
+            panel2.Size = new Size(984, 515);
+            panel2.TabIndex = 3;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 17F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(984, 541);
-            Controls.Add(tabControl);
+            Controls.Add(panel2);
+            Controls.Add(panel1);
             Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
-            Padding = new Padding(5);
             StartPosition = FormStartPosition.CenterScreen;
             Text = "服务一键启动";
             FormClosing += MainForm_FormClosing;
@@ -267,6 +303,8 @@ namespace ServerAllInOne
             tabControl.ResumeLayout(false);
             cmsTabMenu.ResumeLayout(false);
             cmsMain.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel2.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -293,5 +331,8 @@ namespace ServerAllInOne
         private ToolStripMenuItem tsmiOpenFolder;
         private ToolStripMenuItem tsmiEditConfig;
         private ToolStripMenuItem tsmiEditServer;
+        private Panel panel1;
+        private Label lblVersion;
+        private Panel panel2;
     }
 }

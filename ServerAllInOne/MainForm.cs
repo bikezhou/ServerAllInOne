@@ -39,6 +39,11 @@ namespace ServerAllInOne
 
         private void Form1_Load(object? sender, EventArgs e)
         {
+            if (DesignMode)
+                return;
+
+            lblVersion.Text = $"v{Assembly.GetExecutingAssembly()?.GetName()?.Version?.ToString() ?? "1.0"}";
+
             configs.Servers.Sort((a, b) => a.Sort - b.Sort);
             foreach (var server in configs.Servers)
             {
