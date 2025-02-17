@@ -166,6 +166,8 @@ namespace ServerAllInOne.Controls
 
                 if (process != null)
                 {
+                    ChildProcessTracker.AddProcess(process);
+
                     /**
                      * 开启EnableRaisingEvents以触发Exited事件
                      * 默认为false
